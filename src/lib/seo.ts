@@ -1,7 +1,7 @@
 export const SITE_NAME = 'LVP';
 export const SITE_URL = typeof import.meta.env !== 'undefined' && import.meta.env.VITE_SITE_URL
   ? import.meta.env.VITE_SITE_URL
-  : 'https://librasvox.com.br';
+  : 'https://librasvoxpro.com.br';
 
 // Default SEO data
 export const defaultSEO = {
