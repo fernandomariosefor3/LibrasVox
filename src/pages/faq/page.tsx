@@ -386,10 +386,10 @@ export default function FAQPage() {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { to: '/planos', icon: 'ri-user-add-line', label: 'Cadastro Gratuito' },
               { to: '/dictionary', icon: 'ri-book-open-line', label: 'Dicionário' },
               { to: '/alphabet', icon: 'ri-keyboard-line', label: 'Alfabeto 3D' },
               { to: '/cursos', icon: 'ri-graduation-cap-line', label: 'Cursos' },
+              { to: '/exercicios', icon: 'ri-pencil-ruler-2-line', label: 'Exercícios' },
             ].map((link) => (
               <Link
                 key={link.to}

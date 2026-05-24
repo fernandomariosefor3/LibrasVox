@@ -6,7 +6,6 @@ import AlphabetPage from "../pages/alphabet/page";
 import AssistantPage from "../pages/assistant/page";
 import RecognitionPage from "../pages/recognition/page";
 import ProgressPage from "../pages/progress/page";
-import PricingPage from "../pages/pricing/page";
 import CoursesPage from "../pages/courses/page";
 import ExercisesPage from "../pages/exercises/page";
 import ReferencesPage from "../pages/references/page";
@@ -26,7 +25,6 @@ const routes: RouteObject[] = [
   { path: "/assistant", element: <AssistantPage /> },
   { path: "/recognition", element: <RecognitionPage /> },
   { path: "/progress", element: <ProgressPage /> },
-  { path: "/planos", element: <PricingPage /> },
   { path: "/faq", element: <FAQPage /> },
   { path: "/videoaulas", element: <VideoLessonsPage /> },
   { path: "/frases", element: <PhrasesPage /> },

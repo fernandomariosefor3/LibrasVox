@@ -7,6 +7,8 @@ node_modules/
 dist/
 dist-ssr/
 build/
+out/
+auto-imports.d.ts
 
 # environment variables (never commit API keys)
 .env

@@ -38,11 +38,6 @@ const TIPS: Record<string, Record<string, GuideTip>> = {
       message: 'Muitos estudantes de Letras-Libras, pedagogia e fonoaudiologia usam nossa plataforma para reforçar o aprendizado. A prática constante é a chave para fluência!',
       icon: 'ri-chat-smile-2-line',
     },
-    pricing: {
-      title: 'Plataforma 100% Gratuita',
-      message: 'O cadastro é 100% gratuito para todos! Basta se registrar para ter acesso ao dicionário com 146 sinais, alfabeto manual, IA Assistente, cursos, exercícios e certificados.',
-      icon: 'ri-gift-line',
-    },
     cta: {
       title: 'Comece agora!',
       message: 'Não precisa pagar nada para começar. Vá até o dicionário e aprenda seus primeiros sinais. Sugiro começar por "Oi", "Obrigado" e "Por favor" — são os mais usados no dia a dia.',
@@ -175,13 +170,6 @@ const TIPS: Record<string, Record<string, GuideTip>> = {
       icon: 'ri-message-3-line',
     },
   },
-  '/pricing': {
-    header: {
-      title: 'Cadastro Gratuito',
-      message: 'A plataforma é 100% gratuita para todos! Basta fazer o cadastro para acessar todos os recursos: dicionário com 146 sinais, alfabeto manual, IA Assistente, cursos, exercícios e certificados.',
-      icon: 'ri-gift-line',
-    },
-  },
   '/references': {
     header: {
       title: 'Referências acadêmicas',
@@ -207,7 +195,7 @@ const TIPS: Record<string, Record<string, GuideTip>> = {
     },
     'faq-links': {
       title: 'Links úteis',
-      message: 'Esses atalhos levam para as principais páginas do site: cadastro gratuito, dicionário, alfabeto e cursos. Explore todos os recursos — tudo é gratuito!',
+      message: 'Esses atalhos levam para as principais páginas do site: dicionário, alfabeto, cursos e exercícios. Explore todos os recursos — tudo é gratuito!',
       icon: 'ri-links-line',
     },
   },

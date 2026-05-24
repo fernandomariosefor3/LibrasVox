@@ -48,11 +48,6 @@ export const pageSEO = {
     description: 'Acompanhe seu progresso no aprendizado de Libras. Sinais aprendidos, favoritos e estatísticas de estudo.',
     keywords: 'progresso Libras, aprendizado Libras, estatísticas de estudo, acompanhamento Libras',
   },
-  pricing: {
-    title: `Cadastro Gratuito - ${SITE_NAME}`,
-    description: 'Cadastre-se gratuitamente na plataforma LVP e tenha acesso completo a todos os recursos de aprendizado de Libras. 100% gratuito para todos.',
-    keywords: 'cadastro Libras, aprender Libras gratuito, curso Libras gratuito, plataforma Libras gratuita',
-  },
   courses: {
     title: `Cursos de Libras — Do Básico ao Avançado - ${SITE_NAME}`,
     description: 'Aprenda Libras com módulos acadêmicos estruturados do básico ao avançado. Gramática, vocabulário, classificadores e interpretação com referencial acadêmico.',
@@ -127,7 +122,7 @@ export const generateEducationalOrganizationSchema = () => ({
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Course',
-          name: 'Libras Pro',
+          name: 'Libras Avançado',
           description: 'Curso completo de Libras com recursos avançados de IA',
         },
       },

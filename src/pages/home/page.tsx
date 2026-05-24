@@ -5,7 +5,6 @@ import { pageSEO, SITE_URL, generateWebPageSchema, generateOrganizationSchema, g
 import HeroSection from './components/HeroSection';
 import MascotSection from './components/MascotSection';
 import FeaturesSection from './components/FeaturesSection';
-import PricingBanner from './components/PricingBanner';
 import AboutSection from './components/AboutSection';
 import TestimonialsSection from './components/TestimonialsSection';
 import CTASection from './components/CTASection';
@@ -41,7 +40,6 @@ export default function Home() {
         <div data-guide="mascot"><MascotSection /></div>
         <div data-guide="features"><FeaturesSection /></div>
         <div data-guide="history"><LibrasHistorySection /></div>
-        <div data-guide="pricing"><PricingBanner /></div>
         <div data-guide="about"><AboutSection /></div>
         <div data-guide="testimonials"><TestimonialsSection /></div>
         <div data-guide="cta"><CTASection /></div>
