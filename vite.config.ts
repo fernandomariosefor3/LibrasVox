@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import { resolve } from "node:path";
 import AutoImport from "unplugin-auto-import/vite";
 // import { readdyJsxRuntimeProxyPlugin } from "./vite.jsx-runtime-proxy";
