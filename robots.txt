@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+Allow: /dictionary
+Allow: /alphabet
+Allow: /assistant
+Allow: /recognition
+Allow: /progress
+Allow: /planos
+Allow: /cursos
+Allow: /gramatica
+Allow: /exercicios
+Allow: /referencias
+Allow: /flashcards
+Allow: /frases
+Allow: /faq
+Disallow: /login
+Disallow: /admin
+Disallow: /checkout
+Disallow: /dashboard
+Disallow: /account
+
+Sitemap: https://example.com/sitemap.xml
