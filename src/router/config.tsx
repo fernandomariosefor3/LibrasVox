@@ -13,6 +13,7 @@ import GrammarPage from "../pages/grammar/page";
 import FAQPage from "../pages/faq/page";
 import VideoLessonsPage from "../pages/videolessons/page";
 import PhrasesPage from "../pages/phrases/page";
+import FlashcardsPage from "../pages/flashcards/page";
 
 const routes: RouteObject[] = [
   { path: "/", element: <Home /> },
@@ -28,6 +29,7 @@ const routes: RouteObject[] = [
   { path: "/faq", element: <FAQPage /> },
   { path: "/videoaulas", element: <VideoLessonsPage /> },
   { path: "/frases", element: <PhrasesPage /> },
+  { path: "/flashcards", element: <FlashcardsPage /> },
   { path: "*", element: <NotFound /> },
 ];
 
