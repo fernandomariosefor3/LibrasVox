@@ -8,6 +8,7 @@ interface SEOHeadProps {
   ogTitle?: string;
   ogDescription?: string;
   ogType?: string;
+  ogUrl?: string;
   ogImage?: string;
   twitterCard?: string;
   twitterTitle?: string;
@@ -25,6 +26,7 @@ export function SEOHead({
   ogTitle,
   ogDescription,
   ogType = 'website',
+  ogUrl,
   ogImage,
   twitterCard = 'summary_large_image',
   twitterTitle,
@@ -82,8 +84,9 @@ export function SEOHead({
     if (ogImage) {
       updateMeta('og:image', ogImage, true);
     }
-    if (canonical) {
-      updateMeta('og:url', canonical, true);
+    const resolvedUrl = canonical || ogUrl;
+    if (resolvedUrl) {
+      updateMeta('og:url', resolvedUrl, true);
     }
 
     // Twitter
@@ -115,7 +118,7 @@ export function SEOHead({
         existingScript.remove();
       }
     };
-  }, [title, description, keywords, canonical, ogTitle, ogDescription, ogType, ogImage, twitterCard, twitterTitle, twitterDescription, twitterImage, schema, noindex]);
+  }, [title, description, keywords, canonical, ogTitle, ogDescription, ogType, ogUrl, ogImage, twitterCard, twitterTitle, twitterDescription, twitterImage, schema, noindex]);
 
   return null;
 }

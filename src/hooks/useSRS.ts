@@ -340,6 +340,7 @@ export function useSRS() {
   return {
     cards,
     stats: computeStats(),
+    computeStats,
     addCard,
     addMultipleCards,
     removeCard,

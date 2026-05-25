@@ -10,7 +10,7 @@ interface EnrichedSign {
 }
 
 interface Props {
-  scenario: Scenario & { signs: EnrichedSign[] };
+  scenario: Omit<Scenario, 'signs'> & { signs: EnrichedSign[] };
   onClose: () => void;
 }
 

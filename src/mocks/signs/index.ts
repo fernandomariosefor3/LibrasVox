@@ -17,6 +17,7 @@ import {
 import { Sign } from './types';
 
 export { SIGN_CATEGORIES } from './categories';
+export type { Sign } from './types';
 
 export const allSigns: Sign[] = [
   ...saudacoes,

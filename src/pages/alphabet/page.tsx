@@ -75,7 +75,6 @@ export default function AlphabetPage() {
         ogTitle={seo.title}
         ogDescription={seo.description}
         ogType="website"
-        ogUrl={canonical}
         schema={schema}
       />
       <main className="min-h-screen bg-slate-50">
@@ -159,7 +158,6 @@ export default function AlphabetPage() {
                 <div className="relative w-full max-w-xs">
                   <HandCanvas
                     key={currentData.letter}
-                    config={currentData.handConfig}
                     letter={currentData.letter}
                     isMovement={currentData.isMovement}
                   />

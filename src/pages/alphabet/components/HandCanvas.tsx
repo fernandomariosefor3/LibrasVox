@@ -5,19 +5,32 @@ interface Props {
   isMovement?: boolean;
 }
 
-// Fotos oficiais do INES (Instituto Nacional de Educação de Surdos)
-// Extraídas do material "LIBRAS - Língua Brasileira de Sinais - Alfabeto" 2018
-const LETTER_IMAGES: Record<string, string> = {
-  A: '/alphabet/A.jpg', B: '/alphabet/B.jpg', C: '/alphabet/C.jpg',
-  D: '/alphabet/D.jpg', E: '/alphabet/E.jpg', F: '/alphabet/F.jpg',
-  G: '/alphabet/G.jpg', H: '/alphabet/H.jpg', I: '/alphabet/I.jpg',
-  J: '/alphabet/J.jpg', K: '/alphabet/K.jpg', L: '/alphabet/L.jpg',
-  M: '/alphabet/M.jpg', N: '/alphabet/N.jpg', O: '/alphabet/O.jpg',
-  P: '/alphabet/P.jpg', Q: '/alphabet/Q.jpg', R: '/alphabet/R.jpg',
-  S: '/alphabet/S.jpg', T: '/alphabet/T.jpg', U: '/alphabet/U.jpg',
-  V: '/alphabet/V.jpg', W: '/alphabet/W.jpg', X: '/alphabet/X.jpg',
-  Y: '/alphabet/Y.jpg', Z: '/alphabet/Z.jpg',
+// Grid coordinates in the 523×743 original JPEG (public/alphabet_grid.jpg)
+// Extracted from official INES material "Alfabeto e CM 2018"
+const SCALE = 3;
+const IMG_W = 523;
+const IMG_H = 743;
+const CELL_W = 62;
+
+const LETTER_COORDS: Record<string, { x: number; y: number; h: number }> = {
+  A: { x: 152, y: 54,  h: 88  }, B: { x: 222, y: 54,  h: 88  },
+  C: { x: 292, y: 54,  h: 88  }, D: { x: 361, y: 54,  h: 88  },
+  E: { x: 431, y: 54,  h: 88  }, F: { x: 12,  y: 152, h: 87  },
+  G: { x: 82,  y: 152, h: 87  }, H: { x: 152, y: 152, h: 87  },
+  I: { x: 222, y: 152, h: 87  }, J: { x: 292, y: 152, h: 87  },
+  K: { x: 361, y: 152, h: 87  }, L: { x: 431, y: 152, h: 87  },
+  M: { x: 12,  y: 240, h: 103 }, N: { x: 82,  y: 240, h: 103 },
+  O: { x: 152, y: 240, h: 103 }, P: { x: 222, y: 240, h: 103 },
+  Q: { x: 292, y: 240, h: 103 }, R: { x: 361, y: 240, h: 103 },
+  S: { x: 431, y: 240, h: 103 }, T: { x: 12,  y: 344, h: 91  },
+  U: { x: 82,  y: 344, h: 91  }, V: { x: 152, y: 344, h: 91  },
+  W: { x: 222, y: 344, h: 91  }, X: { x: 292, y: 344, h: 91  },
+  Y: { x: 361, y: 344, h: 91  }, Z: { x: 431, y: 344, h: 91  },
 };
+
+// Display container: CELL_W * SCALE wide, standard row height * SCALE tall
+const DISPLAY_W = CELL_W * SCALE;         // 186px
+const DISPLAY_H = 88 * SCALE;            // 264px — fits row 1/2, clips minimally for row 3/4
 
 export default function HandCanvas({ letter, isMovement = false }: Props) {
   const [displayLetter, setDisplayLetter] = useState(letter);
@@ -34,32 +47,43 @@ export default function HandCanvas({ letter, isMovement = false }: Props) {
     }
   }, [letter, displayLetter]);
 
-  const imageUrl = LETTER_IMAGES[displayLetter] ?? LETTER_IMAGES.A;
+  const coords = LETTER_COORDS[displayLetter] ?? LETTER_COORDS.A;
+  const bgX = -(coords.x * SCALE);
+  const bgY = -(coords.y * SCALE + Math.round(((coords.h - 88) * SCALE) / 2)); // center taller rows
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="relative w-full max-w-xs aspect-[4/5] rounded-3xl overflow-hidden bg-slate-100 border border-slate-200">
-        <img
-          src={imageUrl}
-          alt={`Configuração da letra ${displayLetter} no alfabeto manual de Libras`}
-          className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-200 ${
-            isFading ? 'opacity-0' : 'opacity-100'
-          }`}
+      <div
+        className="relative rounded-2xl overflow-hidden border border-slate-200 bg-white"
+        style={{ width: DISPLAY_W, height: DISPLAY_H }}
+      >
+        {/* Sprite crop — full grid at 3× scale */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-200 ${isFading ? 'opacity-0' : 'opacity-100'}`}
+          style={{
+            backgroundImage: 'url(/alphabet_grid.jpg)',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: `${IMG_W * SCALE}px ${IMG_H * SCALE}px`,
+            backgroundPosition: `${bgX}px ${bgY}px`,
+            imageRendering: 'auto',
+          }}
+          aria-label={`Configuração da mão para a letra ${displayLetter} em Libras`}
+          role="img"
         />
 
         {/* Letter badge */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-sm px-5 py-2.5 rounded-full border border-slate-200 flex items-center gap-2">
-          <span className="text-xl font-bold text-slate-800">{displayLetter}</span>
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full border border-slate-200 flex items-center gap-1.5">
+          <span className="text-base font-bold text-slate-800">{displayLetter}</span>
           {isMovement && (
-            <span className="text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+            <span className="text-xs font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full whitespace-nowrap">
               movimento
             </span>
           )}
         </div>
 
-        {/* INES source label */}
-        <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 bg-black/40 backdrop-blur-sm rounded-full text-white/90 text-xs">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        {/* INES source badge */}
+        <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 bg-black/40 backdrop-blur-sm rounded-full text-white/90 text-xs">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>
           Fonte: INES
         </div>
       </div>
