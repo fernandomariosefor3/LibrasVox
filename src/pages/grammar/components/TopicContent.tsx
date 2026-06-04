@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import type { GrammarTopic } from '@/mocks/grammar';
 import ExampleCard from './ExampleCard';
 
@@ -32,7 +32,7 @@ export default function TopicContent({ topic }: TopicContentProps) {
           <div className="flex-1">
             <h2
               className={`text-2xl font-extrabold ${topic.color} mb-1`}
-              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+             
             >
               {topic.title}
             </h2>
@@ -83,7 +83,7 @@ export default function TopicContent({ topic }: TopicContentProps) {
           <div className="bg-white rounded-2xl border border-slate-200 p-6">
             <h3
               className="text-lg font-bold text-slate-900 mb-3"
-              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+             
             >
               {section.title}
             </h3>

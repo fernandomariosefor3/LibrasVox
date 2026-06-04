@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+﻿import { useState, useEffect, useRef, useCallback } from 'react';
 import Navbar from '@/components/feature/Navbar';
 import { SEOHead } from '@/components/feature/SEOHead';
 import { pageSEO, SITE_URL, generateWebPageSchema, generateCourseSchema } from '@/lib/seo';
@@ -181,7 +181,7 @@ export default function AssistantPage() {
               <div className="flex-1 min-w-0">
                 <h2
                   className={`text-base font-bold ${currentMode.color} transition-colors duration-300`}
-                  style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+                 
                 >
                   {currentMode.welcomeTitle}
                 </h2>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Scenario } from '@/mocks/phrases';
 import type { Sign } from '@/mocks/signs';
@@ -35,7 +35,7 @@ export default function ScenarioDetail({ scenario, onClose }: Props) {
                 <i className={`${scenario.icon} text-xl ${scenario.color}`}></i>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-slate-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                <h2 className="text-xl font-bold text-slate-900">
                   {scenario.title}
                 </h2>
                 <p className="text-sm text-slate-600 mt-0.5">{scenario.description}</p>
@@ -97,7 +97,7 @@ export default function ScenarioDetail({ scenario, onClose }: Props) {
               <div className="flex flex-col justify-center">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-2xl">{current.sign.emoji}</span>
-                  <h3 className="text-xl font-bold text-slate-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                  <h3 className="text-xl font-bold text-slate-900">
                     {current.sign.word}
                   </h3>
                 </div>
@@ -149,11 +149,11 @@ export default function ScenarioDetail({ scenario, onClose }: Props) {
             </div>
 
             {showGlossa ? (
-              <p className="text-lg md:text-xl font-semibold text-slate-900 leading-relaxed" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+              <p className="text-lg md:text-xl font-semibold text-slate-900 leading-relaxed">
                 {scenario.glossa}
               </p>
             ) : (
-              <p className="text-lg md:text-xl font-semibold text-slate-700 leading-relaxed italic" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+              <p className="text-lg md:text-xl font-semibold text-slate-700 leading-relaxed italic">
                 {scenario.portuguese}
               </p>
             )}

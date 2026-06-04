@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+﻿import { useState, useCallback, useEffect } from 'react';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { SEOHead } from '@/components/feature/SEOHead';
@@ -89,7 +89,7 @@ export default function AlphabetPage() {
             </div>
             <h1
               className="text-3xl md:text-5xl font-extrabold text-white mb-3"
-              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+             
             >
               Alfabeto Manual em 3D
             </h1>
@@ -245,7 +245,7 @@ export default function AlphabetPage() {
 
           {/* Mini alphabet grid */}
           <div className="mt-8" data-guide="grid">
-            <h2 className="text-lg font-bold text-slate-800 mb-4" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+            <h2 className="text-lg font-bold text-slate-800 mb-4">
               Visão Geral do Alfabeto
             </h2>
             <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-9 xl:grid-cols-9 gap-2">
@@ -263,7 +263,7 @@ export default function AlphabetPage() {
                         ? 'bg-emerald-50 border border-emerald-200 text-emerald-700'
                         : 'bg-white border border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                     }`}
-                    style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+                   
                   >
                     <span className="text-base">{item.letter}</span>
                     {isLearned && !isActive && (

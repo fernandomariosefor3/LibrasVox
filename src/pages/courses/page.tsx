@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { SEOHead } from '@/components/feature/SEOHead';
@@ -82,7 +82,7 @@ export default function CoursesPage() {
               </div>
               <h1
                 className="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-5"
-                style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+               
               >
                 Cursos de{' '}
                 <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">
@@ -183,7 +183,7 @@ export default function CoursesPage() {
                   <div>
                     <h2
                       className={`text-xl font-extrabold ${info.color}`}
-                      style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+                     
                     >
                       Nível {info.label}
                     </h2>

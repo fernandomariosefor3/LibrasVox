@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Sign } from '@/mocks/signs/index';
 import { getCategoryImage } from '@/mocks/signs/categoryImages';
 import VideoPlayer from './VideoPlayer';
@@ -89,7 +89,7 @@ export default function SignModal({ sign, isLearned, isFavorite, onClose, onTogg
                 </span>
                 <h2
                   className="font-extrabold text-white text-2xl leading-tight drop-shadow-md"
-                  style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
+                  style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
                 >
                   {sign.word}
                 </h2>
@@ -103,7 +103,7 @@ export default function SignModal({ sign, isLearned, isFavorite, onClose, onTogg
             <div className="absolute bottom-4 left-4 flex items-center gap-2 z-10">
               <span className="text-3xl select-none">{sign.emoji}</span>
               <div>
-                <h2 className="font-extrabold text-white text-lg leading-tight" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                <h2 className="font-extrabold text-white text-lg leading-tight">
                   {sign.word}
                 </h2>
                 <span className="text-white/70 text-xs">{sign.category}</span>

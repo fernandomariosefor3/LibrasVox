@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+﻿import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 interface Scene {
@@ -145,7 +145,7 @@ export default function MascotSection() {
           </div>
           <h2
             className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3"
-            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+           
           >
             Veja os sinais com mãos reais
           </h2>
@@ -232,7 +232,7 @@ export default function MascotSection() {
             {/* Sign name */}
             <h3
               className="text-5xl md:text-6xl font-extrabold mb-4 transition-all duration-500 leading-none"
-              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif', color: scene.color }}
+              style={{ color: scene.color }}
             >
               {scene.sign}
             </h3>

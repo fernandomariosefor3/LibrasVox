@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+﻿import { Link, useLocation } from "react-router-dom";
 import { SEOHead } from '@/components/feature/SEOHead';
 
 export default function NotFound() {
@@ -17,7 +17,7 @@ export default function NotFound() {
         </h1>
         <div className="relative z-10">
           <h1 className="text-xl md:text-2xl font-semibold mt-6">Esta página não foi encontrada</h1>
-          <p className="mt-2 text-base text-slate-400" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{location.pathname}</p>
+          <p className="mt-2 text-base text-slate-400">{location.pathname}</p>
           <p className="mt-4 text-lg md:text-xl text-slate-500">Volte para a página inicial e explore nosso conteúdo</p>
           <Link
             to="/"

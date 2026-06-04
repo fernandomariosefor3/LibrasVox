@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { SEOHead } from '@/components/feature/SEOHead';
@@ -65,7 +65,7 @@ export default function GrammarPage() {
                   </div>
                   <h1
                     className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-3"
-                    style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+                   
                   >
                     Gramática da{' '}
                     <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-emerald-500">
@@ -225,7 +225,7 @@ export default function GrammarPage() {
             </div>
             <h2
               className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3"
-              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+             
             >
               Pratique o que aprendeu
             </h2>

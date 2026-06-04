@@ -1,4 +1,4 @@
-import type { Scenario } from '@/mocks/phrases';
+﻿import type { Scenario } from '@/mocks/phrases';
 
 interface Props {
   scenario: Scenario;
@@ -29,7 +29,7 @@ export default function ScenarioCard({ scenario, onClick }: Props) {
             <i className={`${scenario.icon} text-xl ${scenario.color}`}></i>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900 text-base leading-snug" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+            <h3 className="font-semibold text-slate-900 text-base leading-snug">
               {scenario.title}
             </h3>
             <div className="flex items-center gap-1.5 mt-0.5">

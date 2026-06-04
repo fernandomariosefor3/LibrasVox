@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Sign } from '@/mocks/signs/index';
 import { getCategoryImage } from '@/mocks/signs/categoryImages';
 import {
@@ -145,7 +145,7 @@ export default function SignCard({
         {/* Word */}
         <h3
           className="text-base font-bold text-slate-900 mb-2 leading-tight"
-          style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+         
         >
           {sign.word}
         </h3>

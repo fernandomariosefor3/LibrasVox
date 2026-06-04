@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 
 const historyChapters = [
   {
@@ -218,7 +218,7 @@ export default function LibrasHistorySection() {
           </div>
           <h2
             className="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4"
-            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+           
           >
             Uma língua com{' '}
             <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">
@@ -281,7 +281,7 @@ export default function LibrasHistorySection() {
                     </span>
                     <h3
                       className="text-xl md:text-2xl font-extrabold text-slate-900"
-                      style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+                     
                     >
                       {chapter.title}
                     </h3>

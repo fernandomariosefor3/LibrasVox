@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import type { AssistantMode } from '@/mocks/assistantModes';
 
 interface WelcomeScreenProps {
@@ -46,7 +46,7 @@ export default function WelcomeScreen({ mode, onSuggestion, hasApiKey }: Welcome
       >
         <h2
           className="text-2xl font-bold text-slate-900 mb-2"
-          style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+         
         >
           {mode.welcomeTitle}
         </h2>

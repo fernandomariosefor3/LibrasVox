@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
@@ -44,7 +44,7 @@ const StatCard = ({ icon, value, label, color, bg, link }: { icon: string; value
         <div className={`w-10 h-10 flex items-center justify-center rounded-xl ${bg}`}>
           <i className={`${icon} ${color} text-lg`}></i>
         </div>
-        <span className={`text-2xl font-extrabold ${color}`} style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{value}</span>
+        <span className={`text-2xl font-extrabold ${color}`}>{value}</span>
       </div>
       <p className="text-sm text-slate-500 font-medium">{label}</p>
     </div>
@@ -130,7 +130,7 @@ export default function ProgressPage() {
                     <i className="ri-bar-chart-line"></i>
                     Dashboard de Aprendizado
                   </div>
-                  <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-3" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                  <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-3">
                     Meu <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">Progresso</em>
                   </h1>
                   <p className="text-slate-500 text-lg max-w-xl">

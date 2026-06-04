@@ -1,4 +1,4 @@
-import { alphabetData } from '@/mocks/alphabet';
+﻿import { alphabetData } from '@/mocks/alphabet';
 
 interface Props {
   activeLetter: string;
@@ -31,7 +31,7 @@ export default function LetterNav({ activeLetter, onSelect, learnedLetters }: Pr
                     ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
-                style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+               
                 aria-label={`Letra ${letter}`}
               >
                 {letter}

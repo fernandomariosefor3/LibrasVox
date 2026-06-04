@@ -1,4 +1,4 @@
-const testimonials = [
+﻿const testimonials = [
   { name: 'Ana Paula S.', role: 'Professora de Ed. Especial', text: 'O LVP transformou minha forma de ensinar. O dicionário visual e o assistente IA tornaram meu trabalho muito mais rico e dinâmico com os alunos.', stars: 5, avatar: 'https://readdy.ai/api/search-image?query=Brazilian%20woman%20teacher%20smiling%20professional%20portrait%2C%20warm%20tone%2C%20simple%20background&width=80&height=80&seq=av1&orientation=squarish' },
   { name: 'Carlos M.', role: 'Estudante de Fonoaudiologia', text: 'O dicionário visual do LVP é fantástico! As fotos reais das mãos me ajudam muito a entender cada configuração. Já aprendi mais de 60 sinais em poucas semanas de prática.', stars: 5, avatar: 'https://readdy.ai/api/search-image?query=young%20Brazilian%20man%20student%20smiling%20portrait%2C%20warm%20tone%2C%20simple%20background&width=80&height=80&seq=av2&orientation=squarish' },
   { name: 'Fernanda L.', role: 'Mãe de criança surda', text: 'Aprendi mais de 30 sinais em uma semana! A datilologia 3D é perfeita para entender cada posição dos dedos. Minha filha ficou emocionada quando me comuniquei em Libras com ela.', stars: 5, avatar: 'https://readdy.ai/api/search-image?query=Brazilian%20mother%20woman%20warm%20smile%20portrait%2C%20soft%20background&width=80&height=80&seq=av3&orientation=squarish' },
@@ -16,7 +16,7 @@ export default function TestimonialsSection() {
             <i className="ri-chat-heart-line"></i>
             Depoimentos
           </div>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4">
             Quem já está <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">aprendendo</em>
           </h2>
           <p className="text-slate-500 text-lg max-w-md mx-auto">Histórias reais de pessoas que transformaram sua comunicação com Libras.</p>

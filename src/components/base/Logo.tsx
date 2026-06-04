@@ -15,7 +15,6 @@ const Logo: React.FC<LogoProps> = ({
     <span
       className={`font-black tracking-tighter ${className}`}
       style={{
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
         fontSize,
         background: 'linear-gradient(135deg, #059669 0%, #10b981 30%, #14b8a6 70%, #0d9488 100%)',
         WebkitBackgroundClip: 'text',

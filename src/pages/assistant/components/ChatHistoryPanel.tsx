@@ -1,4 +1,4 @@
-import type { AssistantMode, ModeId } from '@/mocks/assistantModes';
+﻿import type { AssistantMode, ModeId } from '@/mocks/assistantModes';
 import { assistantModes } from '@/mocks/assistantModes';
 import ModeSwitcher from './ModeSwitcher';
 
@@ -31,7 +31,7 @@ export default function ChatHistoryPanel({
           <div>
             <h1
               className="text-base font-bold text-slate-900"
-              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+             
             >
               Assistente IA
             </h1>

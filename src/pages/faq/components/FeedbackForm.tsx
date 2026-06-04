@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+﻿import { useState, useRef } from 'react';
 
 interface FeedbackFormProps {
   submitUrl: string;
@@ -87,7 +87,7 @@ export default function FeedbackForm({ submitUrl }: FeedbackFormProps) {
           <div className="w-16 h-16 flex items-center justify-center bg-emerald-50 rounded-full mx-auto mb-4">
             <i className="ri-check-line text-emerald-600 text-2xl"></i>
           </div>
-          <h3 className="text-lg font-bold text-slate-900 mb-2" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+          <h3 className="text-lg font-bold text-slate-900 mb-2">
             Obrigado pelo feedback!
           </h3>
           <p className="text-sm text-slate-500 mb-4 max-w-sm mx-auto">

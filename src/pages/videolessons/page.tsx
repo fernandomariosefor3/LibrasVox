@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import { playlists, VIDEO_CATEGORIES, getEmbedUrl, VideoPlaylist } from '@/mocks/videoLessons';
 import VideoCard from './components/VideoCard';
 import { Link } from 'react-router-dom';
@@ -63,7 +63,7 @@ export default function VideoLessonsPage() {
               {activePlaylist.videos.length} aulas
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">
             Videoaulas de Libras
           </h1>
           <p className="text-slate-500 text-sm md:text-base max-w-2xl leading-relaxed">

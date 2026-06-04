@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import Logo from '@/components/base/Logo';
 
 export default function CTASection() {
@@ -16,7 +16,7 @@ export default function CTASection() {
               </div>
               <Logo size={56} className="brightness-[10]" />
             </div>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+            <h2 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4">
               Comece sua jornada<br />em <em className="not-italic text-amber-300">Libras</em> hoje mesmo
             </h2>
             <p className="text-white/80 text-lg max-w-lg mx-auto mb-10">

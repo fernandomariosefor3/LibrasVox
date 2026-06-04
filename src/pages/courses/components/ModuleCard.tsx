@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import type { CourseModule } from '@/mocks/courses';
 import { levelInfo } from '@/mocks/courses';
 
@@ -65,7 +65,7 @@ export default function ModuleCard({ module, index, isCompleted, isLocked, visib
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <h3
               className="text-base font-bold text-slate-900"
-              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+             
             >
               {module.title}
             </h3>

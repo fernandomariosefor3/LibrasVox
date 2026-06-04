@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { SEOHead } from '@/components/feature/SEOHead';
@@ -198,7 +198,7 @@ export default function ExercisesPage() {
               </div>
               <h1
                 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4"
-                style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+               
               >
                 Pratique seu{' '}
                 <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500">

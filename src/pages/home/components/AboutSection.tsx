@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 
 const highlights = [
   { icon: 'ri-award-line', color: 'text-emerald-500', bg: 'bg-emerald-50', text: 'Conteúdo criado com base nos padrões oficiais de Libras' },
@@ -54,7 +54,7 @@ export default function AboutSection() {
             </div>
             <h2
               className="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-6"
-              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+             
             >
               Aprenda no seu{' '}
               <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">

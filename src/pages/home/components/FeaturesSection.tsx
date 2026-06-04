@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 
 const features = [
   {
@@ -75,7 +75,7 @@ export default function FeaturesSection() {
           </div>
           <h2
             className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4"
-            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+           
           >
             Tudo que você precisa para
             <br />
@@ -107,7 +107,7 @@ export default function FeaturesSection() {
               {/* Content */}
               <h3
                 className="text-xl font-bold text-slate-900 mb-3"
-                style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+               
               >
                 {feat.title}
               </h3>

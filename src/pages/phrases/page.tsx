@@ -1,4 +1,4 @@
-import { scenarios } from '@/mocks/phrases';
+﻿import { scenarios } from '@/mocks/phrases';
 import { signs } from '@/mocks/signs';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -69,7 +69,7 @@ export default function PhrasesPage() {
                 <span className="text-slate-300">/</span>
                 <span className="text-sm text-slate-500">Frases por Contexto</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
                 Frases por Contexto
               </h1>
               <p className="text-slate-600 text-base md:text-lg max-w-2xl leading-relaxed">

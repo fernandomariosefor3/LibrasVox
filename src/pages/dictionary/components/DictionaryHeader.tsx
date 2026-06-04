@@ -1,4 +1,4 @@
-import { signs } from '@/mocks/signs/index';
+﻿import { signs } from '@/mocks/signs/index';
 
 interface Props {
   learnedCount: number;
@@ -28,7 +28,7 @@ export default function DictionaryHeader({ learnedCount, favoritesCount, searchQ
           </div>
           <h1
             className="text-3xl md:text-5xl font-extrabold text-white mb-3 leading-tight"
-            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+           
           >
             Dicionário de Sinais
           </h1>

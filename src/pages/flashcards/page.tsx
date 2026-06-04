@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { SEOHead } from '@/components/feature/SEOHead';
@@ -66,7 +66,7 @@ export default function FlashcardsPage() {
               </div>
               <h1
                 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4"
-                style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+               
               >
                 Memorização{' '}
                 <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">

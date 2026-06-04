@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { useSRS } from '@/hooks/useSRS';
 import { useBadges } from '@/hooks/useBadges';
 import BadgeToast from './BadgeToast';
@@ -240,7 +240,7 @@ export default function StudySession({ onComplete }: StudySessionProps) {
               <i className="ri-question-mark text-slate-400 text-xl"></i>
             </div>
             <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-3">Qual é o sinal?</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-3">
               {currentCard.word}
             </h2>
             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${LEVEL_COLORS[currentCard.level] || LEVEL_COLORS[0]}`}>

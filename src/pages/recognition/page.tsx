@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+﻿import { useState, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
@@ -117,7 +117,7 @@ export default function RecognitionPage() {
               <i className="ri-camera-line"></i>
               Demonstração Didática
             </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
               Demonstração de <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-pink-500">Reconhecimento</em>
             </h1>
             <p className="text-slate-500 text-lg max-w-xl mx-auto">
@@ -233,7 +233,7 @@ export default function RecognitionPage() {
                       <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl mb-4">
                         <span className="text-4xl">{result.sign.emoji}</span>
                         <div className="flex-1">
-                          <p className="text-xl font-bold text-slate-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{result.sign.word}</p>
+                          <p className="text-xl font-bold text-slate-900">{result.sign.word}</p>
                           <p className="text-sm text-slate-500">{result.sign.category} · {result.sign.difficulty}</p>
                         </div>
                         <div className="text-center">

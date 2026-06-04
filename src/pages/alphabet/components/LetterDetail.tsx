@@ -1,4 +1,4 @@
-import { LetterData } from '@/mocks/alphabet';
+﻿import { LetterData } from '@/mocks/alphabet';
 
 interface Props {
   data: LetterData;
@@ -36,7 +36,7 @@ export default function LetterDetail({
           <div className="flex items-center gap-3 mb-1">
             <span
               className="text-6xl font-extrabold text-slate-900 leading-none"
-              style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+             
             >
               {data.letter}
             </span>

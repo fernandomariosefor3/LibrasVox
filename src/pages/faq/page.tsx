@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
@@ -232,7 +232,7 @@ export default function FAQPage() {
           </div>
           <h1
             className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight"
-            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+           
           >
             Perguntas <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">Frequentes</span>
           </h1>
@@ -306,7 +306,7 @@ export default function FAQPage() {
                   <i className={`${categories.find((c) => c.title === openCategory)?.icon || 'ri-question-line'} text-emerald-600 text-lg`}></i>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                  <h2 className="text-xl font-bold text-slate-900">
                     {openCategory}
                   </h2>
                   <p className="text-xs text-slate-500">
@@ -362,7 +362,7 @@ export default function FAQPage() {
               </div>
               <h2
                 className="text-2xl font-bold text-slate-900 mb-2"
-                style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+               
               >
                 Ainda tem dúvidas ou encontrou um problema?
               </h2>
@@ -380,7 +380,7 @@ export default function FAQPage() {
         <section className="max-w-4xl mx-auto py-12 px-4" data-guide="faq-links">
           <h2
             className="text-lg font-bold text-slate-900 text-center mb-8"
-            style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}
+           
           >
             Links úteis
           </h2>
