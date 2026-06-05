@@ -40,3 +40,15 @@ yarn-error.log*
 # cache
 .eslintcache
 .vite/
+
+.vercel
+
+# Claude Code
+.claude/
+.playwright-mcp/
+
+# Scripts locais e arquivos temporários
+scripts/
+sifec-screenshot.png
+m.id
+(loadXP)

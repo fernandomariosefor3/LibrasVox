@@ -2,6 +2,8 @@
 import { useSRS } from '@/hooks/useSRS';
 import { useBadges } from '@/hooks/useBadges';
 import BadgeToast from './BadgeToast';
+import { useXP } from '@/hooks/useXP';
+import { XPToast } from '@/components/feature/XPToast';
 import type { SRSCard } from '@/hooks/useSRS';
 
 interface StudySessionProps {
@@ -38,6 +40,7 @@ function formatInterval(level: number): string {
 export default function StudySession({ onComplete }: StudySessionProps) {
   const srs = useSRS();
   const badges = useBadges();
+  const xp = useXP();
   const [dueCards, setDueCards] = useState<SRSCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
@@ -100,6 +103,7 @@ export default function StudySession({ onComplete }: StudySessionProps) {
       }));
 
       checkBadgesAfterReview(correct);
+      if (correct) xp.awardXP('flashcard_correct');
 
       setTimeout(() => {
         setAnimating(false);
@@ -145,6 +149,7 @@ export default function StudySession({ onComplete }: StudySessionProps) {
     return (
       <div className="text-center py-16">
         <BadgeToast badge={badges.justUnlocked} onDismiss={badges.dismissUnlock} />
+        <XPToast gain={xp.recentGain} levelUp={xp.levelUpInfo} onDismissLevelUp={xp.dismissLevelUp} />
         <div className="w-20 h-20 mx-auto flex items-center justify-center bg-gradient-to-br from-emerald-100 to-teal-100 rounded-2xl mb-6">
           <i className="ri-trophy-line text-emerald-600 text-4xl"></i>
         </div>
@@ -210,6 +215,7 @@ export default function StudySession({ onComplete }: StudySessionProps) {
   return (
     <div>
       <BadgeToast badge={badges.justUnlocked} onDismiss={badges.dismissUnlock} />
+      <XPToast gain={xp.recentGain} levelUp={xp.levelUpInfo} onDismissLevelUp={xp.dismissLevelUp} />
 
       {/* Progress bar */}
       <div className="mb-6">

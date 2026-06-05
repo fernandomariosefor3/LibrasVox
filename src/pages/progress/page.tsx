@@ -10,6 +10,9 @@ import { courseModules, levelInfo } from '@/mocks/courses';
 import InterpreterGuide from '@/components/feature/InterpreterGuide';
 import { useBadges } from '@/hooks/useBadges';
 import BadgeMini from '@/pages/flashcards/components/BadgeMini';
+import { useXP } from '@/hooks/useXP';
+import { XPToast } from '@/components/feature/XPToast';
+import { XPLevelCard } from '@/pages/progress/components/XPLevelCard';
 
 interface ProgressData {
   learnedSigns: string[];
@@ -95,6 +98,7 @@ export default function ProgressPage() {
   const overallScore = Math.round((signPct + letterPct + modulePct + Math.min(progress.exercisesTaken * 5, 100)) / 4);
 
   const badgeProgress = badges.getProgress();
+  const xp = useXP();
 
   const seo = pageSEO.progress;
   const canonical = `${SITE_URL}/progress`;
@@ -167,6 +171,11 @@ export default function ProgressPage() {
               <StatCard icon="ri-keyboard-line" value={`${progress.learnedLetters.length}`} label={`de ${totalLetters} letras`} color="text-amber-700" bg="bg-amber-50" link="/alphabet" />
               <StatCard icon="ri-graduation-cap-line" value={`${progress.completedModules.length}`} label={`de ${totalModules} módulos`} color="text-teal-700" bg="bg-teal-50" link="/cursos" />
               <StatCard icon="ri-fire-line" value={progress.streakDays} label="dias seguidos" color="text-rose-700" bg="bg-rose-50" />
+            </div>
+
+            {/* XP Level Card */}
+            <div className="mb-6">
+              <XPLevelCard />
             </div>
 
             {/* Badges row */}
@@ -500,6 +509,7 @@ export default function ProgressPage() {
 
         <Footer />
       </div>
+      <XPToast gain={xp.recentGain} levelUp={xp.levelUpInfo} onDismissLevelUp={xp.dismissLevelUp} />
       <InterpreterGuide />
     </>
   );

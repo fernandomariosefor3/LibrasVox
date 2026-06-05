@@ -4,6 +4,8 @@ import Footer from '@/components/feature/Footer';
 import { SEOHead } from '@/components/feature/SEOHead';
 import { pageSEO, SITE_URL, generateWebPageSchema, generateLearningResourceSchema } from '@/lib/seo';
 import InterpreterGuide from '@/components/feature/InterpreterGuide';
+import { useXP } from '@/hooks/useXP';
+import { XPToast } from '@/components/feature/XPToast';
 
 type QuizQuestion = {
   id: string;
@@ -126,6 +128,7 @@ export default function ExercisesPage() {
   const [revealed, setRevealed] = useState<Record<string, boolean>>({});
   const [score, setScore] = useState<{ correct: number; total: number } | null>(null);
   const [visible, setVisible] = useState(false);
+  const xp = useXP();
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 80);
@@ -150,9 +153,10 @@ export default function ExercisesPage() {
     const newRevealed: Record<string, boolean> = {};
     filtered.forEach((q) => { newRevealed[q.id] = true; });
     setRevealed((prev) => ({ ...prev, ...newRevealed }));
-    // Salvar contagem no progresso
     const prevCount = parseInt(localStorage.getItem('librasvox_exercises_count') || '0', 10);
     localStorage.setItem('librasvox_exercises_count', String(prevCount + 1));
+    for (let i = 0; i < correct; i++) xp.awardXP('exercise_correct');
+    xp.awardXP('exercise_session');
   };
 
   const handleReset = () => {
@@ -384,6 +388,7 @@ export default function ExercisesPage() {
 
         <Footer />
       </div>
+      <XPToast gain={xp.recentGain} levelUp={xp.levelUpInfo} onDismissLevelUp={xp.dismissLevelUp} />
       <InterpreterGuide />
     </>
   );
