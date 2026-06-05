@@ -3,6 +3,8 @@ import { Sign } from '@/mocks/signs/index';
 import { getCategoryImage } from '@/mocks/signs/categoryImages';
 import VideoPlayer from './VideoPlayer';
 import { CATEGORY_GRADIENTS, getCategoryVisuals } from './categoryStyles';
+import { HandShapeIcon } from '@/components/feature/HandShapeIcon';
+import { deriveHandShape } from '@/utils/deriveHandShape';
 
 const DIFFICULTY_STYLE: Record<string, { badge: string; label: string }> = {
   'iniciante': { badge: 'bg-emerald-100 text-emerald-700', label: '🟢 Iniciante' },
@@ -80,20 +82,21 @@ export default function SignModal({ sign, isLearned, isFavorite, onClose, onTogg
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full" />
 
               {/* Central content */}
-              <div className="relative z-10 flex flex-col items-center text-center px-6">
-                <span
-                  className="text-9xl select-none mb-3"
-                  style={{ textShadow: '0 8px 30px rgba(0,0,0,0.15)', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.1))' }}
-                >
-                  {sign.emoji}
+              <div className="relative z-10 flex flex-col items-center text-center px-6 gap-2">
+                <HandShapeIcon
+                  cm={deriveHandShape(sign.steps)}
+                  className="w-32 h-44 text-white/85 drop-shadow-lg"
+                />
+                <span className="text-xs font-bold text-white/60 uppercase tracking-widest font-mono">
+                  CM: {deriveHandShape(sign.steps)}
                 </span>
                 <h2
-                  className="font-extrabold text-white text-2xl leading-tight drop-shadow-md"
+                  className="font-extrabold text-white text-2xl leading-tight drop-shadow-md mt-1"
                   style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
                 >
                   {sign.word}
                 </h2>
-                <span className="text-white/80 text-sm mt-1 font-medium">{sign.category}</span>
+                <span className="text-white/80 text-sm font-medium">{sign.category}</span>
               </div>
             </div>
           )}

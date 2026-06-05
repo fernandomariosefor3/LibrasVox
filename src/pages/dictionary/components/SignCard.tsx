@@ -1,9 +1,10 @@
 ﻿import { useState } from 'react';
 import { Sign } from '@/mocks/signs/index';
 import { getCategoryImage } from '@/mocks/signs/categoryImages';
+import { HandShapeIcon } from '@/components/feature/HandShapeIcon';
+import { deriveHandShape } from '@/utils/deriveHandShape';
 import {
   CATEGORY_GRADIENTS,
-  CATEGORY_PATTERN_COLORS,
   getCategoryVisuals,
 } from './categoryStyles';
 
@@ -112,13 +113,14 @@ export default function SignCard({
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
 
-            {/* Central emoji */}
-            <div className="relative z-10 flex flex-col items-center">
-              <span
-                className={`${visuals.emojiSize} select-none drop-shadow-lg filter`}
-                style={{ textShadow: '0 4px 20px rgba(0,0,0,0.15)' }}
-              >
-                {sign.emoji}
+            {/* Configuração de mão (CM) */}
+            <div className="relative z-10 flex flex-col items-center gap-1.5">
+              <HandShapeIcon
+                cm={deriveHandShape(sign.steps)}
+                className="w-20 h-28 text-white/85 drop-shadow-lg"
+              />
+              <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest font-mono">
+                CM: {deriveHandShape(sign.steps)}
               </span>
             </div>
 
