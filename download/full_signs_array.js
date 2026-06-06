@@ -1,0 +1,1 @@
+["BOM: mão dominante em S (punho fechado) na frente da boca, abra os dedos para frente (configuração 5 final)","NOITE: mão dominante aberta (palma para baixo) passa por cima do antebraço de apoio em arco descendente, como o sol se pondo","Execute os dois sinais em sequência: BOM → NOITE"]
