@@ -340,7 +340,7 @@ export const corpo: Sign[] = [
     emoji: '❤️',
     description: 'Sinal para referir-se ao coração.',
     steps: [
-      'Indicador e médio estendidos (configuração H), posicionados no peito do lado esquerdo',
+      'Indicador e médio estendidos juntos para cima (configuração U), posicionados no peito do lado esquerdo',
       'Toque o peito duas vezes, simulando o batimento cardíaco',
     ],
     difficulty: 'iniciante',
@@ -382,8 +382,8 @@ export const tempo: Sign[] = [
     emoji: '📅',
     description: 'Sinal para referir-se ao dia atual.',
     steps: [
-      'Ambas as mãos em Y (polegar e mínimo estendidos), palmas para cima',
-      'Deixe as mãos cair levemente para baixo até a altura da cintura, indicando o momento presente/agora',
+      'Ambas as mãos abertas (configuração B), palmas para cima',
+      'Deixe as mãos cair levemente para baixo ao mesmo tempo até a altura da cintura, indicando o momento presente/agora',
     ],
     difficulty: 'iniciante',
     videoThumbnail: '',

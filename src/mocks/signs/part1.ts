@@ -83,7 +83,7 @@ export const saudacoes: Sign[] = [
     description: 'Expressão de gratidão.',
     steps: [
       'Mão aberta com dedos juntos (configuração B), palma voltada para baixo',
-      'Toque levemente as pontas dos dedos na testa (ou queixo, conforme variante regional)',
+      'Toque levemente as pontas dos dedos no queixo/boca',
       'Mova a mão para frente e para baixo em leve reverência, como um agradecimento',
     ],
     difficulty: 'iniciante',
@@ -627,8 +627,8 @@ export const cores: Sign[] = [
     description: 'A cor verde em Libras.',
     steps: [
       'Mão em V (indicador e médio estendidos e afastados, demais dedos fechados)',
-      'Palma voltada para a frente na altura do peito',
-      'Balance a mão em V lateralmente para a direita e para a esquerda duas vezes',
+      'Posicione o V próximo ao queixo/boca, palma voltada para a frente',
+      'Balance a mão em V lateralmente para a direita e para a esquerda duas vezes, como se sentisse o gosto',
     ],
     difficulty: 'iniciante',
     videoThumbnail: '',
@@ -654,8 +654,8 @@ export const cores: Sign[] = [
     emoji: '🔵',
     description: 'A cor azul em Libras.',
     steps: [
-      'Mão em A (punho fechado com polegar ao lado), posicione próximo ao queixo',
-      'Mantenha a configuração A e mova a mão para o lado desenhando a letra Z no ar (traço diagonal + horizontal)',
+      'Mão aberta (configuração B) com dedos juntos, posicione a lateral da mão na têmpora/testa',
+      'Deslize a mão para frente e para o lado suavemente, saindo da testa',
     ],
     difficulty: 'iniciante',
     videoThumbnail: '',
@@ -707,9 +707,9 @@ export const cores: Sign[] = [
     emoji: '🩷',
     description: 'A cor rosa em Libras.',
     steps: [
-      'Mão em R (indicador e médio estendidos e cruzados entre si)',
-      'Posicione os dedos cruzados na bochecha',
-      'Faça movimentos circulares pequenos na bochecha com os dedos cruzados',
+      'Mão em B (dedos juntos, polegar dobrado na palma), posicione a ponta dos dedos na bochecha',
+      'Faça movimentos circulares pequenos na bochecha com a mão em B duas vezes',
+      'A associação é com a cor rosada das bochechas',
     ],
     difficulty: 'intermediário',
     videoThumbnail: '',

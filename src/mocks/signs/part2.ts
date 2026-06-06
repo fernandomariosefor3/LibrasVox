@@ -8,8 +8,9 @@ export const alimentos: Sign[] = [
     emoji: '💧',
     description: 'Sinal para referir-se à água.',
     steps: [
-      'Mão em A (punho fechado) posicionada no canto da boca, palma para dentro',
-      'Mova a mão levemente para baixo tocando o queixo uma vez',
+      'Mão em W (indicador, médio e anelar estendidos e juntos, polegar e mínimo fechados)',
+      'Posicione as pontas dos três dedos no queixo, palma para dentro',
+      'Toque o queixo duas vezes suavemente, indicando o ato de beber água',
     ],
     difficulty: 'iniciante',
     videoUrl: 'https://www.youtube.com/embed/videoseries?list=PL8eRdbSEC-1lKAl3SEaFezjDPg2BPgSCe&index=3',
@@ -177,9 +178,9 @@ export const emocoes: Sign[] = [
     emoji: '❤️',
     description: 'Expressão de afeto ou carinho.',
     steps: [
-      'Ambas as mãos fechadas em punho (configuração S)',
+      'Ambas as mãos abertas (configuração 5), palmas voltadas para o corpo',
       'Cruze os braços no peito formando um X, com cada mão sobre o ombro oposto',
-      'Aperte levemente o peito uma vez, como se abraçasse a si mesmo',
+      'Aperte levemente o peito uma vez, como se abraçasse a si mesmo com carinho',
     ],
     difficulty: 'iniciante',
     videoUrl: 'https://www.youtube.com/embed/videoseries?list=PL8eRdbSEC-1lKAl3SEaFezjDPg2BPgSCe&index=6',
