@@ -1,6 +1,5 @@
 ﻿import { useState } from 'react';
 import { Sign } from '@/mocks/signs/index';
-import { getCategoryImage } from '@/mocks/signs/categoryImages';
 import VideoPlayer from './VideoPlayer';
 import { CATEGORY_GRADIENTS, getCategoryVisuals } from './categoryStyles';
 import { HandShapeIcon } from '@/components/feature/HandShapeIcon';
@@ -38,8 +37,7 @@ export default function SignModal({ sign, isLearned, isFavorite, onClose, onTogg
   const diff = DIFFICULTY_STYLE[sign.difficulty];
   const hasVideo = !!sign.videoUrl;
   const hasThumbnail = !!sign.videoThumbnail && sign.videoThumbnail.trim() !== '';
-  const categoryImage = getCategoryImage(sign.category);
-  const effectiveThumbnail = hasThumbnail ? sign.videoThumbnail : categoryImage;
+  const effectiveThumbnail = hasThumbnail ? sign.videoThumbnail : undefined;
   const hasImage = !!effectiveThumbnail;
   const gradient = CATEGORY_GRADIENTS[sign.category] ?? CATEGORY_GRADIENTS['Vários'];
   const visuals = getCategoryVisuals(sign.category);

@@ -1,6 +1,5 @@
 ﻿import { useState } from 'react';
 import { Sign } from '@/mocks/signs/index';
-import { getCategoryImage } from '@/mocks/signs/categoryImages';
 import { HandShapeIcon } from '@/components/feature/HandShapeIcon';
 import { deriveHandShape } from '@/utils/deriveHandShape';
 import {
@@ -41,8 +40,7 @@ export default function SignCard({
   const [imgLoaded, setImgLoaded] = useState(false);
   const hasVideo = !!sign.videoUrl;
   const hasThumbnail = !!sign.videoThumbnail && sign.videoThumbnail.trim() !== '';
-  const categoryImage = getCategoryImage(sign.category);
-  const effectiveThumbnail = hasThumbnail ? sign.videoThumbnail : categoryImage;
+  const effectiveThumbnail = hasThumbnail ? sign.videoThumbnail : undefined;
   const hasImage = !!effectiveThumbnail;
   const gradient = CATEGORY_GRADIENTS[sign.category] ?? CATEGORY_GRADIENTS['Vários'];
   const visuals = getCategoryVisuals(sign.category);
