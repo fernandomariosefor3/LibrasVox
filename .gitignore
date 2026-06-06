@@ -1,0 +1,54 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# build output
+dist/
+dist-ssr/
+build/
+out/
+auto-imports.d.ts
+
+# environment variables (never commit API keys)
+.env
+.env.local
+.env.*.local
+
+# editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# cache
+.eslintcache
+.vite/
+
+.vercel
+
+# Claude Code
+.claude/
+.playwright-mcp/
+
+# Scripts locais e arquivos temporários
+scripts/
+sifec-screenshot.png
+m.id
+(loadXP)

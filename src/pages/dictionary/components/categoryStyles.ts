@@ -1,0 +1,121 @@
+// Category gradient styles for cards without thumbnails
+export const CATEGORY_GRADIENTS: Record<string, string> = {
+  'Saudações': 'from-rose-400 via-orange-300 to-amber-300',
+  'Família': 'from-teal-400 via-emerald-300 to-green-300',
+  'Números': 'from-violet-400 via-purple-300 to-fuchsia-300',
+  'Cores': 'from-red-400 via-pink-300 to-rose-300',
+  'Alimentos': 'from-orange-400 via-amber-300 to-yellow-300',
+  'Emoções': 'from-pink-400 via-rose-300 to-orange-300',
+  'Verbos': 'from-sky-400 via-cyan-300 to-teal-300',
+  'Pronomes': 'from-indigo-400 via-violet-300 to-purple-300',
+  'Adjetivos': 'from-lime-400 via-emerald-300 to-teal-300',
+  'Perguntas': 'from-amber-400 via-yellow-300 to-lime-300',
+  'Lugares': 'from-cyan-400 via-sky-300 to-blue-300',
+  'Animais': 'from-green-400 via-emerald-300 to-teal-300',
+  'Natureza': 'from-emerald-400 via-green-300 to-lime-300',
+  'Transporte': 'from-slate-400 via-zinc-300 to-gray-300',
+  'Profissões': 'from-blue-400 via-indigo-300 to-violet-300',
+  'Corpo': 'from-red-400 via-orange-300 to-amber-300',
+  'Tempo': 'from-amber-400 via-orange-300 to-red-300',
+  'Roupas': 'from-fuchsia-400 via-pink-300 to-rose-300',
+  'Objetos': 'from-stone-400 via-neutral-300 to-zinc-300',
+  'Materiais': 'from-yellow-400 via-amber-300 to-orange-300',
+  'Disciplinas': 'from-blue-400 via-sky-300 to-cyan-300',
+  'Meses': 'from-orange-400 via-red-300 to-rose-300',
+  'Semana': 'from-yellow-400 via-lime-300 to-green-300',
+  'Vários': 'from-gray-400 via-slate-300 to-zinc-300',
+};
+
+// Background pattern colors (low opacity overlays)
+export const CATEGORY_PATTERN_COLORS: Record<string, string> = {
+  'Saudações': 'bg-white/20',
+  'Família': 'bg-white/20',
+  'Números': 'bg-white/20',
+  'Cores': 'bg-white/20',
+  'Alimentos': 'bg-white/20',
+  'Emoções': 'bg-white/20',
+  'Verbos': 'bg-white/20',
+  'Pronomes': 'bg-white/20',
+  'Adjetivos': 'bg-white/20',
+  'Perguntas': 'bg-white/20',
+  'Lugares': 'bg-white/20',
+  'Animais': 'bg-white/20',
+  'Natureza': 'bg-white/20',
+  'Transporte': 'bg-white/15',
+  'Profissões': 'bg-white/20',
+  'Corpo': 'bg-white/20',
+  'Tempo': 'bg-white/20',
+  'Roupas': 'bg-white/20',
+  'Objetos': 'bg-white/15',
+  'Materiais': 'bg-white/20',
+  'Disciplinas': 'bg-white/20',
+  'Meses': 'bg-white/20',
+  'Semana': 'bg-white/20',
+  'Vários': 'bg-white/15',
+};
+
+// Border colors for learned state
+export const CATEGORY_BORDER_COLORS: Record<string, string> = {
+  'Saudações': 'border-rose-300',
+  'Família': 'border-teal-300',
+  'Números': 'border-violet-300',
+  'Cores': 'border-pink-300',
+  'Alimentos': 'border-amber-300',
+  'Emoções': 'border-rose-300',
+  'Verbos': 'border-cyan-300',
+  'Pronomes': 'border-indigo-300',
+  'Adjetivos': 'border-emerald-300',
+  'Perguntas': 'border-yellow-300',
+  'Lugares': 'border-sky-300',
+  'Animais': 'border-green-300',
+  'Natureza': 'border-emerald-300',
+  'Transporte': 'border-slate-300',
+  'Profissões': 'border-blue-300',
+  'Corpo': 'border-orange-300',
+  'Tempo': 'border-amber-300',
+  'Roupas': 'border-fuchsia-300',
+  'Objetos': 'border-stone-300',
+  'Materiais': 'border-yellow-300',
+  'Disciplinas': 'border-sky-300',
+  'Meses': 'border-orange-300',
+  'Semana': 'border-lime-300',
+  'Vários': 'border-gray-300',
+};
+
+// Emoji size and positioning per category for visual variety
+export function getCategoryVisuals(category: string): {
+  emojiSize: string;
+  pattern: string;
+} {
+  const patterns: Record<string, string> = {
+    'Saudações': 'radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.12) 0%, transparent 40%)',
+    'Família': 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 60%), radial-gradient(circle at 10% 10%, rgba(255,255,255,0.08) 0%, transparent 30%)',
+    'Números': 'repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 10px)',
+    'Cores': 'radial-gradient(ellipse at 30% 70%, rgba(255,255,255,0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 30%, rgba(255,255,255,0.1) 0%, transparent 40%)',
+    'Alimentos': 'radial-gradient(circle at 60% 40%, rgba(255,255,255,0.12) 0%, transparent 50%)',
+    'Emoções': 'radial-gradient(circle at 40% 60%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 90% 10%, rgba(255,255,255,0.08) 0%, transparent 30%)',
+    'Verbos': 'linear-gradient(135deg, rgba(255,255,255,0.06) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.06) 75%, transparent 75%, transparent)',
+    'Pronomes': 'radial-gradient(circle at 25% 75%, rgba(255,255,255,0.1) 0%, transparent 45%)',
+    'Adjetivos': 'radial-gradient(circle at 75% 25%, rgba(255,255,255,0.1) 0%, transparent 45%)',
+    'Perguntas': 'repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px, transparent 2px, transparent 8px)',
+    'Lugares': 'radial-gradient(circle at 50% 100%, rgba(255,255,255,0.12) 0%, transparent 50%)',
+    'Animais': 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08) 0%, transparent 40%)',
+    'Natureza': 'radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 0% 100%, rgba(255,255,255,0.06) 0%, transparent 30%)',
+    'Transporte': 'linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)',
+    'Profissões': 'radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 40%)',
+    'Corpo': 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 60%)',
+    'Tempo': 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 40%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.08) 0%, transparent 40%)',
+    'Roupas': 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06) 0%, transparent 50%)',
+    'Objetos': 'radial-gradient(circle at 40% 40%, rgba(255,255,255,0.08) 0%, transparent 40%)',
+    'Materiais': 'radial-gradient(circle at 60% 60%, rgba(255,255,255,0.1) 0%, transparent 40%)',
+    'Disciplinas': 'radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 40%)',
+    'Meses': 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 50%)',
+    'Semana': 'radial-gradient(circle at 70% 30%, rgba(255,255,255,0.1) 0%, transparent 40%)',
+    'Vários': 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 50%)',
+  };
+
+  return {
+    emojiSize: 'text-7xl',
+    pattern: patterns[category] ?? patterns['Vários'],
+  };
+}
