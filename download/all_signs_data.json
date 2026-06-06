@@ -23,7 +23,7 @@
     "category": "Saudações",
     "emoji": "🙏",
     "description": "Expressão de gratidão.",
-    "steps": "\"Mão aberta com dedos juntos (configuração B), palma voltada para baixo\",\"Toque levemente as pontas dos dedos na testa (ou queixo, conforme variante regional)\",\"Mova a mão para frente e para baixo em leve reverência, como um agradecimento\"",
+    "steps": "\"Mão aberta com dedos juntos (configuração B), palma voltada para baixo\",\"Toque levemente as pontas dos dedos no queixo e mova a mão para frente (variante regional: testa)\",\"Mova a mão para frente e para baixo em leve reverência, como um agradecimento\"",
     "difficulty": "iniciante"
   },
   {
@@ -275,7 +275,7 @@
     "category": "Números",
     "emoji": "9️⃣",
     "description": "Número nove.",
-    "steps": "\"Curve o indicador em gancho e toque sua ponta com a ponta do polegar (configuração F/9)\",\"Mantenha o dedo médio, o anelar e o mínimo estendidos para cima\",\"Palma voltada para frente\"",
+    "steps": "\"Curve o indicador em gancho e envolva sua ponta com o polegar (configuração do número 9)\",\"Mantenha o dedo médio, o anelar e o mínimo estendidos para cima\",\"Palma voltada para frente\"",
     "difficulty": "intermediário"
   },
   {
@@ -284,7 +284,7 @@
     "category": "Números",
     "emoji": "🔟",
     "description": "Número dez.",
-    "steps": "\"Mão em A (punho fechado) com polegar estendido para o lado (configuração L/10)\",\"Sacuda o pulso de um lado para o outro duas vezes mantendo a configuração\"",
+    "steps": "\"Punho fechado com apenas o polegar estendido para cima (configuração do número 10)\",\"Sacuda o pulso de um lado para o outro duas vezes mantendo a configuração\"",
     "difficulty": "intermediário"
   },
   {
@@ -311,7 +311,7 @@
     "category": "Cores",
     "emoji": "🔴",
     "description": "A cor vermelha em Libras.",
-    "steps": "\"Indicador estendido e levemente curvado (configuração X relaxada)\",\"Posicione a ponta do indicador sobre o lábio inferior\",\"Passe o dedo pelo lábio inferior da esquerda para a direita uma ou duas vezes (associação com a cor dos lábios)\"",
+    "steps": "\"Indicador estendido (configuração D), demais dedos fechados\",\"Posicione a ponta do indicador sobre o lábio inferior\",\"Passe o dedo pelo lábio inferior da esquerda para a direita uma ou duas vezes (associação com a cor dos lábios)\"",
     "difficulty": "iniciante"
   },
   {
