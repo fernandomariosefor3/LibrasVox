@@ -1,17 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { generateChatResponse } from './gateway';
 
-// Mock the GoogleGenerativeAI library
-vi.mock('@google/generative-ai', () => {
+vi.mock('@google/genai', () => {
   return {
-    GoogleGenerativeAI: vi.fn().mockImplementation(() => ({
-      getGenerativeModel: vi.fn().mockReturnValue({
-        startChat: vi.fn().mockReturnValue({
-          sendMessage: vi.fn().mockResolvedValue({
-            response: { text: () => 'Mocked response' }
-          })
+    GoogleGenAI: vi.fn().mockImplementation(() => ({
+      models: {
+        generateContent: vi.fn().mockResolvedValue({
+          text: 'Mocked response'
         })
-      })
+      }
     }))
   };
 });

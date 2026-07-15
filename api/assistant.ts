@@ -73,11 +73,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ reply });
   } catch (error: any) {
     if (error.message === 'Upstream timeout') {
+      console.error(`[AI_PROVIDER_ERROR] category=timeout status=504`);
       return res.status(504).json({ error: "Gateway timeout" });
     }
     
-    // Log safe category internally without exposing raw stack traces or provider details
-    console.error(`[AI_UNAVAILABLE] Upstream provider error occurred.`);
+    let category = "availability";
+    let status = error.status || 500;
+    const message = error.message ? error.message.toLowerCase() : "";
+
+    if (status === 401 || message.includes("api_key") || message.includes("authentication")) {
+      category = "authentication";
+      status = status === 500 ? 401 : status;
+    } else if (status === 403 || message.includes("permission") || message.includes("forbidden")) {
+      category = "permission";
+      status = status === 500 ? 403 : status;
+    } else if (status === 429 || message.includes("quota") || message.includes("rate limit") || message.includes("exhausted")) {
+      category = "quota";
+      status = status === 500 ? 429 : status;
+    } else if (status === 404 || message.includes("model") || message.includes("not found")) {
+      category = "model";
+      status = status === 500 ? 404 : status;
+    } else if (status === 503 || message.includes("unavailable") || message.includes("overloaded")) {
+      category = "availability";
+      status = 503;
+    }
+
+    // Log safe category internally without exposing raw stack traces, API keys, or provider details
+    console.error(`[AI_PROVIDER_ERROR] category=${category} status=${status}`);
     
     return res.status(503).json({ 
       error: "O assistente está temporariamente indisponível. Tente novamente em alguns minutos.",
