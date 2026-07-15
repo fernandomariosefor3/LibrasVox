@@ -8,7 +8,7 @@ export async function generateChatResponse(messages: any[]) {
     throw new Error("GEMINI_API_KEY is not defined in the environment.");
   }
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: process.env.GEMINI_MODEL || "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: process.env.GEMINI_MODEL || "gemini-2.5-flash" });
 
   const formattedHistory = messages.slice(0, -1).map((msg) => ({
     role: msg.role === "user" ? "user" : "model",

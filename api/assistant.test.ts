@@ -100,8 +100,11 @@ describe('Assistant API', () => {
     const req = createMockReq({ messages: [{ role: 'user', content: 'hello' }] });
     const res = createMockRes();
     await handler(req, res);
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+    expect(res.status).toHaveBeenCalledWith(503);
+    expect(res.json).toHaveBeenCalledWith({ 
+      error: 'O assistente está temporariamente indisponível. Tente novamente em alguns minutos.',
+      code: 'AI_UNAVAILABLE'
+    });
   });
 
   it('returns rate-limit response', async () => {

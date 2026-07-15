@@ -75,7 +75,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (error.message === 'Upstream timeout') {
       return res.status(504).json({ error: "Gateway timeout" });
     }
-    // Safe upstream error response - do not expose provider errors or internal stack traces
-    return res.status(500).json({ error: "Internal Server Error" });
+    
+    // Log safe category internally without exposing raw stack traces or provider details
+    console.error(`[AI_UNAVAILABLE] Upstream provider error occurred.`);
+    
+    return res.status(503).json({ 
+      error: "O assistente está temporariamente indisponível. Tente novamente em alguns minutos.",
+      code: "AI_UNAVAILABLE" 
+    });
   }
 }
