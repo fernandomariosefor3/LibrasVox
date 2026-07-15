@@ -39,9 +39,9 @@ export const pageSEO = {
     keywords: 'frases Libras, contexto Libras, survival Libras, cenários Libras, conversação Libras, glossa Libras',
   },
   recognition: {
-    title: `Demonstração de Reconhecimento Visual de Sinais - ${SITE_NAME}`,
-    description: 'Demonstração didática de reconhecimento de sinais em Libras. Faça upload de uma imagem e veja como uma tecnologia de identificação visual poderia funcionar. Resultados simulados para fins educativos.',
-    keywords: 'demonstração reconhecimento Libras, identificação visual sinais, tecnologia Libras, simulação sinais',
+    title: `LibrasVox Vision — Treinador Visual de Libras - ${SITE_NAME}`,
+    description: 'Treine sinais em Libras diante da câmera e receba feedback sobre configuração da mão, localização e movimento.',
+    keywords: 'treinador Libras, reconhecimento Libras, prática com câmera, configuração de mão, LibrasVox Vision',
   },
   progress: {
     title: `Meu Progresso - ${SITE_NAME}`,

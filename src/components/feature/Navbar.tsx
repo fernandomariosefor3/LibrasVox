@@ -5,6 +5,7 @@ import { AccessibilityPanel } from './AccessibilityPanel';
 
 const primaryLinks = [
   { path: '/', label: 'Início', icon: 'ri-home-4-line' },
+  { path: '/recognition', label: 'Vision', icon: 'ri-camera-lens-line' },
   { path: '/dictionary', label: 'Glossário', icon: 'ri-translate-2' },
   { path: '/assistant', label: 'IA Assistente', icon: 'ri-sparkling-line' },
   { path: '/progress', label: 'Progresso', icon: 'ri-bar-chart-line' },

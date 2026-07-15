@@ -1,462 +1,118 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { SEOHead } from '@/components/feature/SEOHead';
-import { pageSEO, SITE_URL, generateWebPageSchema, generateCourseSchema } from '@/lib/seo';
-import { signs, Sign } from '@/mocks/signs/index';
-import InterpreterGuide from '@/components/feature/InterpreterGuide';
+import { pageSEO, SITE_URL, generateWebPageSchema } from '@/lib/seo';
+import { useHandLandmarker, type VisionCriterion } from '@/hooks/useHandLandmarker';
+import { ACTIVE_VISION_SIGNS, VISION_SIGNS } from '@/data/visionSigns';
 
-interface AnalysisResult {
-  sign: Sign;
-  confidence: number;
-  matchedFeatures: string[];
-}
-
-const SIMULATED_RESULTS: AnalysisResult[] = [
-  { sign: signs[0], confidence: 94, matchedFeatures: ['Mão aberta (B)', 'Posição próxima à cabeça', 'Movimento lateral'] },
-  { sign: signs[1], confidence: 87, matchedFeatures: ['Mão plana (B)', 'Contato com queixo', 'Movimento para frente'] },
-  { sign: signs[5], confidence: 72, matchedFeatures: ['Mão aberta', 'Posição lateral'] },
-];
-
-type Mode = 'upload' | 'camera';
+type Stage = 'watch' | 'ready' | 'countdown' | 'recording' | 'analyzing' | 'result';
+type Attempt = { id: number; score: number };
 
 export default function RecognitionPage() {
-  const [mode, setMode] = useState<Mode>('upload');
-  const [image, setImage] = useState<string | null>(null);
-  const [analyzing, setAnalyzing] = useState(false);
-  const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [dragOver, setDragOver] = useState(false);
-  const [cameraActive, setCameraActive] = useState(false);
-  const [cameraError, setCameraError] = useState<string | null>(null);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selected, setSelected] = useState(0);
+  const [speed, setSpeed] = useState(1);
+  const [stage, setStage] = useState<Stage>('watch');
+  const [cameraOn, setCameraOn] = useState(false);
+  const [cameraError, setCameraError] = useState('');
+  const [count, setCount] = useState(3);
+  const [result, setResult] = useState<VisionCriterion[]>([]);
+  const [attempts, setAttempts] = useState<Attempt[]>(() => { try { return JSON.parse(localStorage.getItem('vision-attempts') || '[]'); } catch { return []; } });
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-
-  useEffect(() => {
-    return () => { streamRef.current?.getTracks().forEach((t) => t.stop()); };
-  }, []);
+  const sign = ACTIVE_VISION_SIGNS[selected];
+  const { status: visionStatus, handsDetected, evaluate } = useHandLandmarker(videoRef, canvasRef, cameraOn, stage === 'recording');
 
   const stopCamera = useCallback(() => {
-    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
     if (videoRef.current) videoRef.current.srcObject = null;
-    setCameraActive(false);
+    setCameraOn(false);
   }, []);
 
-  const startCamera = useCallback(async () => {
-    setCameraError(null);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+  useEffect(() => () => stopCamera(), [stopCamera]);
+  useEffect(() => {
+    if (stage !== 'countdown') return;
+    if (!count) { setStage('recording'); return; }
+    const timer = setTimeout(() => setCount((n) => n - 1), 800);
+    return () => clearTimeout(timer);
+  }, [stage, count]);
+  useEffect(() => {
+    if (stage !== 'recording') return;
+    const timer = setTimeout(() => setStage('analyzing'), 3200);
+    return () => clearTimeout(timer);
+  }, [stage]);
+  useEffect(() => {
+    if (stage !== 'analyzing') return;
+    const timer = setTimeout(() => {
+      const set = evaluate(sign.word);
+      if (!set) {
+        setCameraError('Não houve pontos suficientes para avaliar. Mantenha a mão inteira visível e tente novamente.');
+        setStage('ready');
+        return;
+      }
+      const score = Math.round(set.reduce((sum, item) => sum + item.score, 0) / set.length);
+      setResult(set);
+      setAttempts((old) => {
+        const next = [{ id: Date.now(), score }, ...old].slice(0, 8);
+        localStorage.setItem('vision-attempts', JSON.stringify(next));
+        return next;
       });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
+      setStage('result');
+    }, 900);
+    return () => clearTimeout(timer);
+  }, [stage, attempts.length, evaluate, sign.word]);
+
+  const startCamera = async () => {
+    setCameraError('');
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 960 } }, audio: false });
       streamRef.current = stream;
-      setCameraActive(true);
-    } catch (err) {
-      const e = err as DOMException;
-      if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
-        setCameraError('Permissão negada. Permita o acesso à câmera nas configurações do navegador.');
-      } else if (e.name === 'NotFoundError') {
-        setCameraError('Nenhuma câmera encontrada neste dispositivo.');
-      } else {
-        setCameraError('Não foi possível acessar a câmera. Verifique se outro aplicativo está usando-a.');
-      }
+      if (videoRef.current) { videoRef.current.srcObject = stream; await videoRef.current.play(); }
+      setCameraOn(true); setStage('ready');
+    } catch (error) {
+      setCameraError((error as DOMException).name === 'NotAllowedError' ? 'Permissão negada. Libere a câmera nas configurações do navegador.' : 'Não foi possível iniciar a câmera neste dispositivo.');
     }
-  }, []);
-
-  const runAnalysis = useCallback(() => {
-    setAnalyzing(true);
-    setResult(null);
-    setTimeout(() => {
-      setResult(SIMULATED_RESULTS[Math.floor(Math.random() * SIMULATED_RESULTS.length)]);
-      setAnalyzing(false);
-    }, 2500);
-  }, []);
-
-  const captureFromCamera = useCallback(() => {
-    if (!videoRef.current || !canvasRef.current) return;
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    canvas.width = video.videoWidth || 640;
-    canvas.height = video.videoHeight || 480;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    setImage(canvas.toDataURL('image/jpeg', 0.85));
-    stopCamera();
-    runAnalysis();
-  }, [stopCamera, runAnalysis]);
-
-  const handleFile = useCallback((file: File) => {
-    setError(null);
-    setResult(null);
-    if (!file.type.startsWith('image/')) {
-      setError('Por favor, envie apenas arquivos de imagem (JPG, PNG, WEBP).');
-      return;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      setError('A imagem deve ter menos de 10MB.');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setImage(e.target?.result as string);
-      runAnalysis();
-    };
-    reader.readAsDataURL(file);
-  }, [runAnalysis]);
-
-  const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
-  }, [handleFile]);
-
-  const onDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(true);
-  }, []);
-
-  const onDragLeave = useCallback(() => setDragOver(false), []);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) handleFile(file);
   };
-
-  const handleReset = useCallback(() => {
-    setImage(null);
-    setResult(null);
-    setError(null);
-    setAnalyzing(false);
-    setCameraError(null);
-    stopCamera();
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  }, [stopCamera]);
-
-  const switchMode = (newMode: Mode) => {
-    handleReset();
-    setMode(newMode);
-  };
-
+  const startAttempt = () => { setCameraError(''); setResult([]); setCount(3); setStage('countdown'); };
+  const retry = () => { setResult([]); setStage(cameraOn ? 'ready' : 'watch'); if (!cameraOn) startCamera(); };
+  const score = result.length ? Math.round(result.reduce((sum, item) => sum + item.score, 0) / result.length) : 0;
+  const best = useMemo(() => attempts.reduce((max, item) => Math.max(max, item.score), 0), [attempts]);
   const seo = pageSEO.recognition;
-  const canonical = `${SITE_URL}/recognition`;
 
-  const schema = [
-    generateWebPageSchema(seo.title, seo.description, canonical),
-    generateCourseSchema('Demonstração de Reconhecimento Visual de Sinais', 'Simulação didática de reconhecimento de sinais em Libras por imagem.', canonical),
-  ];
+  return <>
+    <SEOHead title={seo.title} description={seo.description} keywords={seo.keywords} canonical={`${SITE_URL}/recognition`} ogTitle={seo.title} ogDescription={seo.description} ogType="website" ogUrl={`${SITE_URL}/recognition`} schema={generateWebPageSchema(seo.title, seo.description, `${SITE_URL}/recognition`)} />
+    <div className="min-h-screen bg-surface-50"><Navbar /><main className="pt-16">
+      <section className="relative overflow-hidden bg-surface-900 text-white"><div className="absolute inset-0 bg-mesh-brand opacity-70" /><div className="relative max-w-7xl mx-auto px-4 md:px-8 py-10 flex flex-col md:flex-row md:items-end justify-between gap-6"><div><div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-brand-300 mb-3"><span className="w-2 h-2 bg-brand-400 rounded-full animate-pulse" /> LibrasVox Vision · Protótipo</div><h1 className="text-3xl md:text-5xl font-extrabold">Treine. Veja. <span className="text-brand-400">Aperfeiçoe.</span></h1><p className="mt-3 text-surface-300 max-w-2xl">Pratique diante da câmera e receba orientação sobre configuração da mão, localização e movimento.</p></div><div className="flex gap-3"><Stat value={`${attempts.length}`} label="tentativas" /><Stat value={best ? `${best}%` : '—'} label="melhor resultado" accent /></div></div></section>
 
-  return (
-    <>
-      <SEOHead
-        title={seo.title}
-        description={seo.description}
-        keywords={seo.keywords}
-        canonical={canonical}
-        ogTitle={seo.title}
-        ogDescription={seo.description}
-        ogType="website"
-        ogUrl={canonical}
-        schema={schema}
-      />
-      <div className="min-h-screen bg-white">
-        <Navbar />
-
-        {/* Hero */}
-        <section className="pt-28 pb-12 px-4 md:px-8 bg-gradient-to-b from-slate-50 to-white" data-guide="header">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-fuchsia-50 border border-fuchsia-200 rounded-full text-fuchsia-700 text-sm font-semibold mb-5">
-              <i className="ri-camera-line"></i>
-              Demonstração Didática
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
-              Demonstração de <em className="not-italic text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-pink-500">Reconhecimento</em>
-            </h1>
-            <p className="text-slate-500 text-lg max-w-xl mx-auto">
-              Capture um sinal pela câmera ou faça upload de uma imagem para ver como uma IA identificaria a configuração de mão. <strong>Simulação didática</strong> — resultados gerados para demonstração.
-            </p>
+      <section className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5"><div className="flex gap-3 overflow-x-auto scrollbar-hide pb-2">{ACTIVE_VISION_SIGNS.map((item, index) => <button key={item.id} onClick={() => { setSelected(index); setResult([]); setStage(cameraOn ? 'ready' : 'watch'); }} className={`flex items-center gap-3 px-4 py-3 rounded-2xl border shrink-0 text-left ${selected === index ? 'bg-surface-900 border-surface-900 text-white shadow-lg' : 'bg-white border-surface-200 text-surface-700'}`}><span className="text-2xl">{item.emoji}</span><span><strong className="block text-sm">{item.word}</strong><small className="opacity-60">Validando</small></span></button>)}</div><Link to="/vision/coleta" className="btn-secondary shrink-0"><i className="ri-video-add-line" /> Estúdio de coleta</Link></div>
+        <div className="grid lg:grid-cols-[.86fr_1.14fr] gap-6 items-start">
+          <div className="space-y-4"><article className="bg-white rounded-3xl border border-surface-200 shadow-card overflow-hidden"><div className={`relative aspect-video bg-gradient-to-br ${sign.gradient ?? 'from-brand-400 to-teal-600'} flex items-center justify-center overflow-hidden`}><div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle,white 1px,transparent 1px)', backgroundSize: '24px 24px' }} /><span className="text-[7rem] animate-bounce-gentle select-none" style={{ animationDuration: `${2 / speed}s` }}>{sign.emoji}</span><span className="absolute top-4 left-4 badge bg-black/25 text-white backdrop-blur-md"><i className="ri-video-line" /> Referência visual</span></div><div className="p-5"><p className="text-xs font-bold uppercase tracking-widest text-brand-600">Sinal em validação</p><h2 className="text-2xl font-extrabold">{sign.word}</h2><p className="text-sm text-surface-500 mt-1">{sign.hint}</p><div className="flex items-center justify-between mt-5 pt-4 border-t border-surface-100"><span className="text-sm font-semibold">Velocidade</span><div className="flex bg-surface-100 p-1 rounded-xl">{[.5, .75, 1].map((value) => <button key={value} onClick={() => setSpeed(value)} className={`px-3 py-1.5 rounded-lg text-xs font-bold ${speed === value ? 'bg-white text-brand-700 shadow-sm' : 'text-surface-500'}`}>{value}×</button>)}</div></div></div></article>
+            <div className="grid grid-cols-3 gap-3">{[['ri-hand', 'Configuração'], ['ri-focus-3-line', 'Localização'], ['ri-route-line', 'Movimento']].map(([icon, label], i) => <div key={label} className="bg-white border border-surface-200 rounded-2xl p-3"><span className="w-8 h-8 bg-brand-50 text-brand-600 rounded-lg grid place-items-center"><i className={icon} /></span><strong className="block text-xs mt-2">0{i + 1} · {label}</strong></div>)}</div>
           </div>
-        </section>
 
-        {/* Main content */}
-        <section className="py-8 px-4 md:px-8 pb-20" data-guide="practice">
-          <div className="max-w-3xl mx-auto">
+          <div className="space-y-5"><article className="bg-white rounded-3xl border border-surface-200 shadow-card overflow-hidden"><div className="p-5 flex items-center justify-between border-b border-surface-100"><div><p className="text-xs font-bold uppercase tracking-widest text-brand-600">Sua vez</p><h2 className="text-xl font-extrabold">Repita o sinal</h2></div><span className={`badge ${handsDetected ? 'bg-brand-50 text-brand-700' : 'bg-surface-100 text-surface-500'}`}><span className={`w-1.5 h-1.5 rounded-full ${handsDetected ? 'bg-brand-500 animate-pulse' : 'bg-surface-400'}`} />{handsDetected ? `${handsDetected} mão${handsDetected > 1 ? 's' : ''} detectada${handsDetected > 1 ? 's' : ''}` : cameraOn ? 'Buscando mãos' : 'Câmera desligada'}</span></div>
+            <div className="relative aspect-video bg-surface-900 overflow-hidden"><video ref={videoRef} autoPlay playsInline muted className={`absolute inset-0 w-full h-full object-cover -scale-x-100 ${cameraOn ? 'opacity-100' : 'opacity-0'}`} aria-label="Câmera ao vivo" /><canvas ref={canvasRef} className={`absolute inset-0 w-full h-full object-cover -scale-x-100 pointer-events-none ${cameraOn ? 'opacity-100' : 'opacity-0'}`} aria-hidden="true" />
+              {!cameraOn && <Overlay icon="ri-camera-line" title="Prepare seu espaço" text="Posicione o rosto e as mãos no enquadramento, com boa iluminação."><button onClick={startCamera} className="btn-primary mt-5"><i className="ri-camera-line" /> Ativar câmera</button></Overlay>}
+              {cameraOn && stage === 'ready' && <div className="absolute inset-x-0 bottom-0 p-5 pt-16 bg-gradient-to-t from-black/80 to-transparent text-center"><button onClick={startAttempt} disabled={visionStatus !== 'ready' || handsDetected === 0} className="btn bg-white text-surface-900 px-6 py-3 shadow-xl disabled:opacity-60"><i className={visionStatus === 'loading' ? 'ri-loader-4-line animate-spin' : 'ri-record-circle-line text-rose-500'} /> {visionStatus === 'loading' ? 'Carregando visão…' : handsDetected ? 'Começar tentativa' : 'Mostre sua mão'}</button></div>}
+              {stage === 'countdown' && <Overlay title={`${count || 'Já!'}`} text="Prepare as mãos" large />}
+              {stage === 'recording' && <span className="absolute top-4 left-4 badge bg-rose-500 text-white"><span className="w-2 h-2 rounded-full bg-white animate-pulse" /> Gravando · faça o sinal</span>}
+              {stage === 'analyzing' && <Overlay icon="ri-loader-4-line animate-spin" title="Analisando sua tentativa" text="Comparando os três critérios essenciais…" />}
+            </div>{visionStatus === 'error' && <p className="m-4 p-3 bg-amber-50 text-amber-800 rounded-xl text-sm"><i className="ri-wifi-off-line mr-2" />O rastreador não carregou. Verifique sua conexão e recarregue a página.</p>}{cameraError && <p className="m-4 p-3 bg-rose-50 text-rose-700 rounded-xl text-sm"><i className="ri-error-warning-line mr-2" />{cameraError}</p>}<div className="p-4 grid grid-cols-3 gap-2 border-t border-surface-100">{[['ri-sun-line', 'Rosto iluminado'], ['ri-hand', 'Mão inteira visível'], ['ri-contrast-2-line', 'Fundo neutro']].map(([icon, label]) => <span key={label} className="text-2xs text-surface-500 text-center"><i className={`${icon} text-brand-500 mr-1`} />{label}</span>)}</div></article>
 
-            {/* Mode selector */}
-            {!image && (
-              <div className="flex bg-slate-100 p-1 rounded-2xl mb-6">
-                <button
-                  onClick={() => switchMode('upload')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                    mode === 'upload' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  <i className="ri-upload-cloud-2-line"></i>
-                  Upload de Imagem
-                </button>
-                <button
-                  onClick={() => switchMode('camera')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
-                    mode === 'camera' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-                  }`}
-                >
-                  <i className="ri-camera-line"></i>
-                  Câmera ao Vivo
-                </button>
-              </div>
-            )}
-
-            {/* Camera UI */}
-            {mode === 'camera' && !image && (
-              <div className="space-y-4">
-                <div className="relative rounded-2xl overflow-hidden bg-slate-900 aspect-video flex items-center justify-center min-h-[280px]">
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className={`absolute inset-0 w-full h-full object-cover ${cameraActive ? 'opacity-100' : 'opacity-0'}`}
-                    aria-label="Feed da câmera ao vivo"
-                  />
-
-                  {!cameraActive && !cameraError && (
-                    <div className="relative z-10 text-center p-8">
-                      <div className="w-20 h-20 flex items-center justify-center mx-auto mb-4 bg-white/10 backdrop-blur-sm rounded-2xl">
-                        <i className="ri-camera-line text-white text-3xl"></i>
-                      </div>
-                      <p className="text-slate-300 text-sm font-medium mb-5">
-                        Ative a câmera para capturar um sinal ao vivo
-                      </p>
-                      <button
-                        onClick={startCamera}
-                        className="px-6 py-3 bg-fuchsia-600 text-white rounded-xl text-sm font-bold hover:bg-fuchsia-500 transition-colors cursor-pointer whitespace-nowrap"
-                      >
-                        <i className="ri-camera-line mr-2"></i>
-                        Ativar Câmera
-                      </button>
-                    </div>
-                  )}
-
-                  {cameraError && (
-                    <div className="relative z-10 text-center p-8">
-                      <i className="ri-camera-off-line text-rose-400 text-3xl mb-3 block"></i>
-                      <p className="text-rose-300 text-sm mb-4">{cameraError}</p>
-                      <button
-                        onClick={startCamera}
-                        className="px-4 py-2 bg-white/10 text-white rounded-xl text-sm font-semibold hover:bg-white/20 transition-colors cursor-pointer"
-                      >
-                        Tentar novamente
-                      </button>
-                    </div>
-                  )}
-
-                  {cameraActive && (
-                    <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-3 z-10">
-                      <button
-                        onClick={stopCamera}
-                        className="w-11 h-11 flex items-center justify-center bg-white/20 backdrop-blur-sm text-white rounded-full hover:bg-white/30 transition-colors cursor-pointer"
-                        aria-label="Parar câmera"
-                      >
-                        <i className="ri-stop-line text-lg"></i>
-                      </button>
-                      <button
-                        onClick={captureFromCamera}
-                        className="flex items-center gap-2 px-7 py-3 bg-white text-slate-900 rounded-full text-sm font-bold shadow-xl hover:bg-fuchsia-50 transition-colors cursor-pointer whitespace-nowrap"
-                      >
-                        <i className="ri-camera-line"></i>
-                        Capturar Sinal
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <canvas ref={canvasRef} className="hidden" aria-hidden="true" />
-
-                <div className="grid grid-cols-3 gap-3">
-                  {[
-                    { icon: 'ri-sun-line', color: 'text-amber-500', label: 'Boa iluminação' },
-                    { icon: 'ri-hand-heart-line', color: 'text-emerald-500', label: 'Mão visível' },
-                    { icon: 'ri-contrast-2-line', color: 'text-teal-500', label: 'Fundo neutro' },
-                  ].map((tip) => (
-                    <div key={tip.label} className="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-xl">
-                      <i className={`${tip.icon} ${tip.color}`}></i>
-                      <span className="text-xs text-slate-600">{tip.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Upload area */}
-            {mode === 'upload' && !image && (
-              <div
-                className={`border-2 border-dashed rounded-3xl p-10 text-center transition-all cursor-pointer ${
-                  dragOver ? 'border-fuchsia-400 bg-fuchsia-50' : 'border-slate-300 bg-white hover:border-slate-400 hover:bg-slate-50'
-                }`}
-                onClick={() => fileInputRef.current?.click()}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
-                onDragLeave={onDragLeave}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleInputChange}
-                />
-                <div className="w-16 h-16 flex items-center justify-center mx-auto mb-4 bg-fuchsia-50 rounded-2xl">
-                  <i className="ri-upload-cloud-2-line text-fuchsia-500 text-3xl"></i>
-                </div>
-                <p className="text-base font-semibold text-slate-700 mb-1">
-                  Arraste uma foto ou clique para selecionar
-                </p>
-                <p className="text-sm text-slate-400 mb-4">JPG, PNG ou WEBP · Máx. 10MB</p>
-                <div className="flex flex-wrap justify-center gap-2">
-                  <span className="px-3 py-1 bg-slate-100 text-slate-500 text-xs rounded-full">Mão visível</span>
-                  <span className="px-3 py-1 bg-slate-100 text-slate-500 text-xs rounded-full">Fundo neutro</span>
-                  <span className="px-3 py-1 bg-slate-100 text-slate-500 text-xs rounded-full">Boa iluminação</span>
-                </div>
-              </div>
-            )}
-
-            {/* Error */}
-            {error && (
-              <div className="mt-4 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3">
-                <i className="ri-error-warning-line text-rose-500 text-lg mt-0.5"></i>
-                <p className="text-sm text-rose-700">{error}</p>
-              </div>
-            )}
-
-            {/* Image preview + analysis */}
-            {image && (
-              <div className="space-y-6">
-                <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
-                  <img src={image} alt="Sinal capturado" className="w-full max-h-[400px] object-contain" />
-                  <button
-                    onClick={handleReset}
-                    className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl border border-slate-200 text-slate-600 hover:text-rose-500 cursor-pointer transition-colors"
-                    aria-label="Remover imagem e recomeçar"
-                  >
-                    <i className="ri-close-line text-lg"></i>
-                  </button>
-                </div>
-
-                {!analyzing && !result && (
-                  <button
-                    onClick={runAnalysis}
-                    className="w-full py-4 rounded-2xl bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white font-bold text-base hover:opacity-90 transition-all cursor-pointer whitespace-nowrap flex items-center justify-center gap-2"
-                  >
-                    <i className="ri-sparkling-2-line text-lg"></i>
-                    Demonstrar Reconhecimento
-                  </button>
-                )}
-
-                {analyzing && (
-                  <div className="text-center py-8">
-                    <div className="relative w-16 h-16 mx-auto mb-4">
-                      <div className="absolute inset-0 border-4 border-fuchsia-100 rounded-full"></div>
-                      <div className="absolute inset-0 border-4 border-fuchsia-500 rounded-full border-t-transparent animate-spin"></div>
-                    </div>
-                    <p className="text-base font-semibold text-slate-700 mb-1">Processando imagem...</p>
-                    <p className="text-sm text-slate-400">Simulação de análise dos parâmetros fonológicos</p>
-                    <div className="flex justify-center gap-2 mt-4">
-                      {[0, 150, 300].map((delay) => (
-                        <span key={delay} className="w-2 h-2 bg-fuchsia-300 rounded-full animate-bounce" style={{ animationDelay: `${delay}ms` }}></span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {result && (
-                  <div className="bg-white border-2 border-fuchsia-200 rounded-2xl overflow-hidden">
-                    <div className="p-6">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 flex items-center justify-center bg-fuchsia-50 rounded-xl">
-                          <i className="ri-sparkling-2-line text-fuchsia-500 text-xl"></i>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-fuchsia-600">Demonstração de Reconhecimento</p>
-                          <p className="text-sm text-slate-500">Simulação didática de identificação visual</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl mb-4">
-                        <span className="text-4xl">{result.sign.emoji}</span>
-                        <div className="flex-1">
-                          <p className="text-xl font-bold text-slate-900">{result.sign.word}</p>
-                          <p className="text-sm text-slate-500">{result.sign.category} · {result.sign.difficulty}</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-2xl font-extrabold text-fuchsia-600">{result.confidence}%</p>
-                          <p className="text-xs text-slate-400">confiança simulada</p>
-                        </div>
-                      </div>
-
-                      <div className="mb-4">
-                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Características simuladas</p>
-                        <div className="flex flex-wrap gap-2">
-                          {result.matchedFeatures.map((f) => (
-                            <span key={f} className="px-3 py-1.5 bg-fuchsia-50 text-fuchsia-700 text-xs font-medium rounded-lg border border-fuchsia-100">
-                              <i className="ri-check-line mr-1"></i>{f}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-100 rounded-xl mb-4">
-                        <i className="ri-information-line text-amber-600 text-lg mt-0.5 flex-shrink-0"></i>
-                        <p className="text-sm text-amber-700 leading-relaxed">
-                          <strong>Simulação didática.</strong> Em uma implementação real, um modelo de ML treinado em Libras analisaria os parâmetros fonológicos (CM, PA e M).
-                        </p>
-                      </div>
-
-                      <div className="flex gap-3">
-                        <button
-                          onClick={handleReset}
-                          className="flex-1 py-3 rounded-xl bg-fuchsia-50 text-fuchsia-700 font-semibold text-sm hover:bg-fuchsia-100 transition-colors cursor-pointer whitespace-nowrap"
-                        >
-                          <i className="ri-refresh-line mr-1.5"></i>
-                          Nova captura
-                        </button>
-                        <Link
-                          to="/dictionary"
-                          className="flex-1 py-3 rounded-xl bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white font-semibold text-sm text-center hover:opacity-90 transition-all cursor-pointer whitespace-nowrap"
-                        >
-                          <i className="ri-book-open-line mr-1.5"></i>
-                          Ver no Dicionário
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Disclaimer */}
-            <div className="mt-8 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-              <div className="flex items-start gap-3">
-                <i className="ri-information-line text-slate-400 text-lg mt-0.5 flex-shrink-0"></i>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  <strong>Nota:</strong> Esta página é uma <strong>demonstração didática</strong>. Os resultados são gerados automaticamente (simulação) e não representam análise real de IA treinada em Libras. Para aprendizado, consulte sempre um professor ou intérprete profissional de Libras.
-                </p>
-              </div>
-            </div>
+            {stage === 'result' && <article className="bg-white rounded-3xl border border-surface-200 shadow-card p-5 animate-fade-up" aria-live="polite"><div className="flex justify-between gap-5 mb-5"><div><span className="badge-brand mb-2"><i className="ri-sparkling-2-line" /> Feedback visual</span><h2 className="text-xl font-extrabold">Análise concluída</h2><p className="text-sm text-surface-500 mt-1">Métricas calculadas a partir dos pontos reais da sua mão.</p></div><div className="w-20 h-20 shrink-0 rounded-full grid place-items-center" style={{ background: `conic-gradient(#10b981 ${score * 3.6}deg,#e2e8f0 0)` }}><span className="w-16 h-16 bg-white rounded-full grid place-items-center font-extrabold text-xl">{score}%</span></div></div><div className="space-y-3">{result.map((item) => <div key={item.label} className="p-4 bg-surface-50 border border-surface-100 rounded-2xl"><div className="flex items-center gap-3"><span className="w-9 h-9 bg-brand-100 text-brand-700 rounded-xl grid place-items-center"><i className={item.icon} /></span><div className="flex-1"><div className="flex justify-between"><strong className="text-sm">{item.label}</strong><strong className={item.score >= 85 ? 'text-brand-600' : 'text-amber-600'}>{item.score}%</strong></div><div className="h-1.5 bg-surface-200 rounded-full mt-2"><div className={`h-full rounded-full ${item.score >= 85 ? 'bg-brand-500' : 'bg-amber-400'}`} style={{ width: `${item.score}%` }} /></div></div></div><p className="text-xs text-surface-600 mt-3 pl-12">{item.note}</p></div>)}</div><button onClick={retry} className="btn-primary w-full mt-5"><i className="ri-restart-line" /> Tentar novamente</button><p className="text-2xs text-surface-400 mt-4"><i className="ri-information-line mr-1" />Avaliação heurística baseada nos 21 landmarks do MediaPipe. Ela mede geometria e trajetória, mas ainda não substitui um modelo treinado com sinais de Libras.</p></article>}
           </div>
-        </section>
-
-        <Footer />
-      </div>
-      <InterpreterGuide />
-    </>
-  );
+        </div>
+        {attempts.length > 0 && <section className="mt-8 bg-white border border-surface-200 rounded-3xl p-5"><div className="flex justify-between items-end mb-4"><div><p className="text-xs font-bold uppercase tracking-widest text-brand-600">Progresso</p><h2 className="text-xl font-extrabold">Tentativas recentes</h2></div><span className="text-xs text-surface-400">Salvo neste dispositivo</span></div><div className="flex items-end gap-2 h-24">{[...attempts].reverse().map((item, i) => <div key={item.id} className="flex-1 h-full flex flex-col justify-end items-center"><small className="text-2xs font-bold">{item.score}%</small><div className="w-full max-w-16 bg-gradient-to-t from-brand-600 to-brand-400 rounded-t-lg" style={{ height: `${item.score}%` }} /><small className="text-2xs text-surface-400">{i + 1}</small></div>)}</div></section>}
+        <section className="mt-8 bg-surface-900 text-white rounded-3xl p-5 md:p-7 overflow-hidden relative"><div className="absolute -right-16 -top-20 w-64 h-64 bg-brand-500/20 rounded-full blur-3xl" /><div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-6"><div><p className="text-xs font-bold uppercase tracking-widest text-brand-300">Dataset do protótipo</p><h2 className="text-2xl font-extrabold mt-1">Poucos sinais, dados diversos</h2><p className="text-sm text-surface-300 mt-2 max-w-xl">O treinador libera somente sinais validados. Os demais avançam conforme recebem gravações frontais, laterais e variações suficientes.</p></div><div className="flex flex-wrap items-center gap-3"><DatasetCount value={ACTIVE_VISION_SIGNS.length} label="em validação" color="text-brand-300" /><DatasetCount value={VISION_SIGNS.filter((item) => item.status === 'collecting').length} label="em coleta" color="text-amber-300" /><DatasetCount value={VISION_SIGNS.filter((item) => item.status === 'planned').length} label="planejados" color="text-surface-200" /><Link to="/vision/coleta" className="btn bg-white text-surface-900 px-5 py-3"><i className="ri-video-add-line" /> Coletar amostras</Link></div></div></section>
+      </section>
+    </main><Footer /></div>
+  </>;
 }
+
+function Stat({ value, label, accent = false }: { value: string; label: string; accent?: boolean }) { return <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3"><p className={`text-2xl font-extrabold ${accent ? 'text-brand-300' : ''}`}>{value}</p><p className="text-xs text-surface-400">{label}</p></div>; }
+function DatasetCount({ value, label, color }: { value: number; label: string; color: string }) { return <div className="px-4 py-2 border border-white/10 bg-white/5 rounded-xl"><strong className={`text-xl ${color}`}>{value}</strong><span className="block text-2xs text-surface-400">{label}</span></div>; }
+function Overlay({ icon, title, text, children, large = false }: { icon?: string; title: string; text: string; children?: React.ReactNode; large?: boolean }) { return <div className="absolute inset-0 bg-surface-900/80 backdrop-blur-sm flex flex-col items-center justify-center text-center text-white p-8">{icon && <span className="w-14 h-14 rounded-2xl bg-white/10 grid place-items-center mb-4"><i className={`${icon} text-2xl`} /></span>}<h3 className={`${large ? 'text-7xl' : 'text-base'} font-extrabold`}>{title}</h3><p className="text-sm text-surface-400 mt-1">{text}</p>{children}</div>; }
