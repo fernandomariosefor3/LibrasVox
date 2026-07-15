@@ -32,14 +32,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const clientIp = (req.headers['x-forwarded-for'] as string) || req.socket?.remoteAddress || 'unknown';
   const { allowed, retryAfter } = checkRateLimit(clientIp);
-  
+
   if (!allowed) {
     res.setHeader('Retry-After', retryAfter!.toString());
     return res.status(429).json({ error: "Too many requests" });
   }
 
   try {
-    const { messages } = req.body;
+    const { modeId, messages } = req.body;
+
+    if (!modeId || !['tutor', 'translator', 'practice', 'culture'].includes(modeId)) {
+      return res.status(400).json({ error: "Invalid modeId" });
+    }
+
     if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: "Messages must be a non-empty array" });
     }
@@ -69,14 +74,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(413).json({ error: "Total request payload too large" });
     }
 
-    const reply = await generateChatResponse(messages);
+    // Limit conversation history to the most recent 10 messages
+    let limitedMessages = messages.slice(-10);
+
+    // Ensure the first message in the limited array is from a user
+    if (limitedMessages.length > 0 && limitedMessages[0].role !== 'user') {
+      limitedMessages = limitedMessages.slice(1);
+    }
+
+    const reply = await generateChatResponse(modeId, limitedMessages);
     return res.status(200).json({ reply });
   } catch (error: any) {
     if (error.message === 'Upstream timeout') {
       console.error(`[AI_PROVIDER_ERROR] category=timeout status=504`);
       return res.status(504).json({ error: "Gateway timeout" });
     }
-    
+
     let category = "availability";
     let status = error.status || 500;
     const message = error.message ? error.message.toLowerCase() : "";
@@ -100,10 +113,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Log safe category internally without exposing raw stack traces, API keys, or provider details
     console.error(`[AI_PROVIDER_ERROR] category=${category} status=${status}`);
-    
-    return res.status(503).json({ 
+
+    return res.status(503).json({
       error: "O assistente está temporariamente indisponível. Tente novamente em alguns minutos.",
-      code: "AI_UNAVAILABLE" 
+      code: "AI_UNAVAILABLE"
     });
   }
 }

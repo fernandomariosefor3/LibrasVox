@@ -55,20 +55,16 @@ export function useGeminiChat(modeId: ModeId): UseGeminiChatReturn {
       try {
         const mode = getModeById(modeId);
 
-        // Prepend the system prompt as the first message
-        const historyToSend = [
-          { role: 'user', content: mode.systemPrompt },
-          { role: 'assistant', content: 'Entendido.' },
-          ...newMessages.map((msg) => ({
-            role: msg.role,
-            content: msg.content,
-          }))
-        ];
+        // Send only the actual conversation to the backend
+        const historyToSend = newMessages.map((msg) => ({
+          role: msg.role,
+          content: msg.content,
+        }));
 
         const response = await fetch('/api/assistant', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messages: historyToSend }),
+          body: JSON.stringify({ modeId, messages: historyToSend }),
         });
 
         if (!response.ok) {
