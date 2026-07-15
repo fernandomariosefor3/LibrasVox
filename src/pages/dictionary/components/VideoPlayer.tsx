@@ -141,7 +141,7 @@ export default function VideoPlayer({ videoUrl, title }: Props) {
     } catch {
       setError('Não foi possível inicializar o player de vídeo.');
     }
-  }, [apiReady, videoId]);
+  }, [apiReady, videoId, isLooping]);
 
   const togglePlay = useCallback(() => {
     if (!playerRef.current) return;

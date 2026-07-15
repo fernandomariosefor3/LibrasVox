@@ -1,5 +1,4 @@
 import { useState, useCallback, useRef } from 'react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { ModeId } from '@/mocks/assistantModes';
 import { getModeById } from '@/mocks/assistantModes';
 
@@ -17,18 +16,13 @@ interface UseGeminiChatReturn {
   error: string | null;
   sendMessage: (text: string) => Promise<void>;
   clearChat: () => void;
-  hasApiKey: boolean;
 }
-
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
 
 export function useGeminiChat(modeId: ModeId): UseGeminiChatReturn {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef(false);
-
-  const hasApiKey = Boolean(API_KEY && API_KEY.trim() !== '' && API_KEY !== 'sua_chave_aqui');
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -44,61 +38,47 @@ export function useGeminiChat(modeId: ModeId): UseGeminiChatReturn {
         timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, userMessage]);
+      const newMessages = [...messages, userMessage];
+      setMessages(newMessages);
       setIsLoading(true);
 
-      if (!hasApiKey) {
-        const assistantMessage: ChatMessage = {
-          id: `assistant-${Date.now()}`,
-          role: 'assistant',
-          content: `⚠️ **Chave de API não configurada**\n\nPara usar o Assistente IA, você precisa configurar a chave do Google Gemini:\n\n1. Acesse [aistudio.google.com](https://aistudio.google.com/) e crie uma chave gratuita\n2. Crie um arquivo \`.env\` na raiz do projeto\n3. Adicione: \`VITE_GEMINI_API_KEY=sua_chave_aqui\`\n4. Reinicie o servidor de desenvolvimento\n\nA chave é gratuita e leva menos de 2 minutos para configurar! 🚀`,
-          timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
-        setIsLoading(false);
-        return;
-      }
-
       const assistantId = `assistant-${Date.now()}`;
-      const streamingMessage: ChatMessage = {
+      const placeholderMessage: ChatMessage = {
         id: assistantId,
         role: 'assistant',
-        content: '',
+        content: '...',
         timestamp: new Date(),
         isStreaming: true,
       };
-      setMessages((prev) => [...prev, streamingMessage]);
+      setMessages((prev) => [...prev, placeholderMessage]);
 
       try {
-        const genAI = new GoogleGenerativeAI(API_KEY!);
         const mode = getModeById(modeId);
 
-        const model = genAI.getGenerativeModel({
-          model: 'gemini-1.5-flash',
-          systemInstruction: mode.systemPrompt,
+        // Prepend the system prompt as the first message
+        const historyToSend = [
+          { role: 'user', content: mode.systemPrompt },
+          { role: 'assistant', content: 'Entendido.' },
+          ...newMessages.map((msg) => ({
+            role: msg.role,
+            content: msg.content,
+          }))
+        ];
+
+        const response = await fetch('/api/assistant', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: historyToSend }),
         });
 
-        const history = messages.map((msg) => ({
-          role: msg.role === 'user' ? 'user' : 'model',
-          parts: [{ text: msg.content }],
-        }));
-
-        const chat = model.startChat({ history });
-        const result = await chat.sendMessageStream(text.trim());
-
-        let fullText = '';
-        for await (const chunk of result.stream) {
-          if (abortRef.current) break;
-          const chunkText = chunk.text();
-          fullText += chunkText;
-          setMessages((prev) =>
-            prev.map((msg) =>
-              msg.id === assistantId
-                ? { ...msg, content: fullText, isStreaming: true }
-                : msg,
-            ),
-          );
+        if (!response.ok) {
+          throw new Error('Falha na resposta da IA');
         }
+
+        const data = await response.json();
+        const fullText = data.reply;
+
+        if (abortRef.current) return;
 
         setMessages((prev) =>
           prev.map((msg) =>
@@ -108,6 +88,7 @@ export function useGeminiChat(modeId: ModeId): UseGeminiChatReturn {
           ),
         );
       } catch (err) {
+        if (abortRef.current) return;
         const errMsg =
           err instanceof Error ? err.message : 'Erro ao conectar com a IA';
         setError(errMsg);
@@ -116,7 +97,7 @@ export function useGeminiChat(modeId: ModeId): UseGeminiChatReturn {
             msg.id === assistantId
               ? {
                   ...msg,
-                  content: `❌ Erro ao processar sua mensagem: ${errMsg}\n\nTente novamente ou verifique sua chave de API.`,
+                  content: `❌ Erro ao processar sua mensagem: ${errMsg}\n\nTente novamente.`,
                   isStreaming: false,
                 }
               : msg,
@@ -126,7 +107,7 @@ export function useGeminiChat(modeId: ModeId): UseGeminiChatReturn {
         setIsLoading(false);
       }
     },
-    [messages, isLoading, modeId, hasApiKey],
+    [messages, isLoading, modeId],
   );
 
   const clearChat = useCallback(() => {
@@ -136,5 +117,5 @@ export function useGeminiChat(modeId: ModeId): UseGeminiChatReturn {
     setIsLoading(false);
   }, []);
 
-  return { messages, isLoading, error, sendMessage, clearChat, hasApiKey };
+  return { messages, isLoading, error, sendMessage, clearChat };
 }

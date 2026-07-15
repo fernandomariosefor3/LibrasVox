@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { GrammarTopic } from '@/mocks/grammar';
 import ExampleCard from './ExampleCard';
 
@@ -15,7 +15,7 @@ export default function TopicContent({ topic }: TopicContentProps) {
     setActiveSection(topic.sections[0]?.id ?? '');
     const t = setTimeout(() => setFadeIn(true), 80);
     return () => clearTimeout(t);
-  }, [topic.id]);
+  }, [topic.id, topic.sections]);
 
   const section = topic.sections.find((s) => s.id === activeSection) ?? topic.sections[0];
 
