@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { generateChatResponse } from './gateway';
+import { generateChatResponse } from './gateway.js';
 
 vi.mock('@google/genai', () => {
   return {

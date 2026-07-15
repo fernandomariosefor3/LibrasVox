@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { generateChatResponse } from "./_lib/gateway";
+import { generateChatResponse } from "./_lib/gateway.js";
 
 // Note: In-memory rate limiting is only a basic protection in serverless environments,
 // as each instance will maintain its own state. A distributed cache like Redis is required for strict limits.

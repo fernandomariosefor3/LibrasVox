@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import handler from './assistant';
-import * as gateway from './_lib/gateway';
+import handler from './assistant.js';
+import * as gateway from './_lib/gateway.js';
 
-vi.mock('./_lib/gateway', () => ({
+vi.mock('./_lib/gateway.js', () => ({
   generateChatResponse: vi.fn(),
 }));
 
