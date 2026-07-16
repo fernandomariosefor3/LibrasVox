@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSRS } from '@/hooks/useSRS';
 import { useBadges } from '@/hooks/useBadges';
 import BadgeToast from './BadgeToast';
@@ -115,7 +115,7 @@ export default function StudySession({ onComplete }: StudySessionProps) {
         }
       }, 300);
     },
-    [currentCard, currentIndex, dueCards.length, srs, checkBadgesAfterReview]
+    [currentCard, currentIndex, dueCards.length, srs, checkBadgesAfterReview, xp]
   );
 
   if (dueCards.length === 0) {

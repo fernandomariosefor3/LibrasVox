@@ -1,13 +1,12 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { AssistantMode } from '@/mocks/assistantModes';
 
 interface WelcomeScreenProps {
   mode: AssistantMode;
   onSuggestion: (text: string) => void;
-  hasApiKey: boolean;
 }
 
-export default function WelcomeScreen({ mode, onSuggestion, hasApiKey }: WelcomeScreenProps) {
+export default function WelcomeScreen({ mode, onSuggestion }: WelcomeScreenProps) {
   const [visible, setVisible] = useState(false);
   const [cardsVisible, setCardsVisible] = useState(false);
 
@@ -55,37 +54,7 @@ export default function WelcomeScreen({ mode, onSuggestion, hasApiKey }: Welcome
         </p>
       </div>
 
-      {/* API Key warning */}
-      {!hasApiKey && (
-        <div
-          className={`mb-6 w-full max-w-md bg-amber-50 border border-amber-200 rounded-xl p-4 text-left transition-all duration-700 delay-200 ${
-            visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
-        >
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 flex items-center justify-center bg-amber-100 rounded-lg flex-shrink-0">
-              <i className="ri-key-line text-amber-600 text-base"></i>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-amber-800 mb-1">API Key necessária</p>
-              <p className="text-xs text-amber-700 leading-relaxed">
-                Configure{' '}
-                <code className="bg-amber-100 px-1 rounded font-mono">VITE_GEMINI_API_KEY</code> no
-                arquivo <code className="bg-amber-100 px-1 rounded font-mono">.env</code> para ativar a IA.
-                Chave gratuita em{' '}
-                <a
-                  href="https://aistudio.google.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-amber-800 underline"
-                >
-                  aistudio.google.com
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* API Key warning removed */}
 
       {/* Suggestions */}
       <div className="w-full max-w-lg">

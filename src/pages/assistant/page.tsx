@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Navbar from '@/components/feature/Navbar';
 import { SEOHead } from '@/components/feature/SEOHead';
 import { pageSEO, SITE_URL, generateWebPageSchema, generateCourseSchema } from '@/lib/seo';
@@ -16,7 +16,7 @@ type ModeMessages = Record<ModeId, ReturnType<typeof useGeminiChat>['messages']>
 
 function ModeChat({ modeId, onCountChange }: { modeId: ModeId; onCountChange: (count: number) => void }) {
   const mode = getModeById(modeId);
-  const { messages, isLoading, sendMessage, clearChat, hasApiKey } = useGeminiChat(modeId);
+  const { messages, isLoading, sendMessage, clearChat } = useGeminiChat(modeId);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatAreaRef = useRef<HTMLDivElement>(null);
   const [fadeIn, setFadeIn] = useState(false);
@@ -40,7 +40,7 @@ function ModeChat({ modeId, onCountChange }: { modeId: ModeId; onCountChange: (c
       {/* Chat area */}
       <div ref={chatAreaRef} className="flex-1 overflow-y-auto px-4 md:px-6 py-4">
         {messages.length === 0 ? (
-          <WelcomeScreen mode={mode} onSuggestion={sendMessage} hasApiKey={hasApiKey} />
+          <WelcomeScreen mode={mode} onSuggestion={sendMessage} />
         ) : (
           <div className="max-w-3xl mx-auto">
             {messages.map((msg) => (
