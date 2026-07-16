@@ -14,9 +14,9 @@ export const defaultSEO = {
 // Page-specific SEO data
 export const pageSEO = {
   home: {
-    title: `${SITE_NAME} - Aprenda Libras Gratuitamente com Inteligência Artificial`,
-    description: 'Plataforma educacional 100% gratuita para aprender Libras com inteligência artificial. Dicionário de sinais, datilologia 3D, assistente Gemini e demonstração de reconhecimento visual de sinais.',
-    keywords: 'aprender Libras, língua brasileira de sinais, dicionário Libras, IA para Libras, datilologia, curso de Libras',
+    title: 'LibrasVox | Aprenda Libras no seu ritmo',
+    description: 'Aprenda Libras com cursos estruturados, dicionário visual, frases, exercícios e recursos acessíveis para estudar no seu ritmo.',
+    keywords: 'aprender Libras, língua brasileira de sinais, dicionário Libras, curso de Libras, datilologia, frases em Libras, exercícios de Libras',
   },
   dictionary: {
     title: `Dicionário de Libras - ${SITE_NAME}`,

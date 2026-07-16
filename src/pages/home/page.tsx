@@ -4,17 +4,20 @@ import { SEOHead } from '@/components/feature/SEOHead';
 import { pageSEO, SITE_URL, generateWebPageSchema, generateOrganizationSchema, generateEducationalOrganizationSchema } from '@/lib/seo';
 import HeroSection from './components/HeroSection';
 import MascotSection from './components/MascotSection';
-import FeaturesSection from './components/FeaturesSection';
-import AboutSection from './components/AboutSection';
-import TestimonialsSection from './components/TestimonialsSection';
-import CTASection from './components/CTASection';
+import ChooseHowSection from './components/ChooseHowSection';
+import LearnSection from './components/LearnSection';
+import PracticeSection from './components/PracticeSection';
+import ProgressSection from './components/ProgressSection';
+import SchoolsSection from './components/SchoolsSection';
 import LibrasHistorySection from './components/LibrasHistorySection';
+import AccessibilitySection from './components/AccessibilitySection';
+import PlatformOverviewSection from './components/PlatformOverviewSection';
 import InterpreterGuide from '@/components/feature/InterpreterGuide';
 
 export default function Home() {
   const seo = pageSEO.home;
   const canonical = `${SITE_URL}/`;
-  
+
   const schema = [
     generateWebPageSchema(seo.title, seo.description, canonical),
     generateOrganizationSchema(),
@@ -38,11 +41,14 @@ export default function Home() {
         <Navbar />
         <div data-guide="hero"><HeroSection /></div>
         <div data-guide="mascot"><MascotSection /></div>
-        <div data-guide="features"><FeaturesSection /></div>
+        <div data-guide="choose-how"><ChooseHowSection /></div>
+        <div data-guide="learn"><LearnSection /></div>
+        <div data-guide="practice"><PracticeSection /></div>
+        <div data-guide="progress"><ProgressSection /></div>
+        <div data-guide="schools"><SchoolsSection /></div>
         <div data-guide="history"><LibrasHistorySection /></div>
-        <div data-guide="about"><AboutSection /></div>
-        <div data-guide="testimonials"><TestimonialsSection /></div>
-        <div data-guide="cta"><CTASection /></div>
+        <div data-guide="accessibility"><AccessibilitySection /></div>
+        <div data-guide="overview"><PlatformOverviewSection /></div>
         <Footer />
       </main>
       <InterpreterGuide />

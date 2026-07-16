@@ -2,9 +2,8 @@ import { Link } from 'react-router-dom';
 
 const stats = [
   { value: '50+', label: 'Sinais', icon: 'ri-hand-heart-line' },
-  { value: '26',  label: 'Letras A–Z', icon: 'ri-keyboard-line' },
-  { value: '4',   label: 'Modos IA', icon: 'ri-sparkling-line' },
-  { value: '100%',label: 'Gratuito', icon: 'ri-heart-line' },
+  { value: '26', label: 'Letras A–Z', icon: 'ri-keyboard-line' },
+  { value: '100%', label: 'Gratuito', icon: 'ri-heart-line' },
 ];
 
 export default function HeroSection() {
@@ -45,49 +44,43 @@ export default function HeroSection() {
 
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-500/15 border border-brand-500/25 rounded-full text-brand-300 text-xs font-semibold mb-8 backdrop-blur-sm animate-fade-down">
-          <i className="ri-sparkling-line text-accent-400" />
-          <span>Plataforma Educacional com Inteligência Artificial</span>
+          <i className="ri-graduation-cap-line" aria-hidden="true" />
+          <span>Plataforma educacional de Libras</span>
         </div>
 
         {/* Headline */}
         <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.08] tracking-tight mb-6 animate-fade-up stagger-1">
-          Aprenda{' '}
-          <span className="text-gradient-brand">Libras</span>
+          Aprenda <span className="text-gradient-brand">Libras</span>
           <br />
-          com{' '}
-          <span className="text-gradient-accent">
-            Inteligência{' '}
-            <br className="sm:hidden" />
-            Artificial
-          </span>
+          no seu ritmo
         </h1>
 
         {/* Description */}
         <p className="text-base md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed mb-10 animate-fade-up stagger-2">
-          Dicionário de sinais, datilologia interativa, assistente IA Gemini e muito mais
-          — tudo gratuito para você aprender Libras no seu próprio ritmo.
+          Dicionário visual, cursos estruturados e prática guiada para você aprender
+          do alfabeto às situações do dia a dia.
         </p>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-16 animate-fade-up stagger-3">
           <Link
-            to="/dictionary"
+            to="/cursos"
             className="flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-brand-500 to-brand-600 text-white rounded-2xl text-base font-bold shadow-xl shadow-brand-500/30 hover:shadow-2xl hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap press-scale"
           >
-            <i className="ri-book-open-line text-lg" />
-            Explorar Dicionário
+            <i className="ri-graduation-cap-line text-lg" />
+            Começar a aprender
           </Link>
           <Link
-            to="/assistant"
+            to="/dictionary"
             className="flex items-center gap-2 px-7 py-3.5 bg-white/8 border border-white/20 backdrop-blur-sm text-white rounded-2xl text-base font-semibold hover:bg-white/15 hover:border-white/30 hover:-translate-y-0.5 transition-all duration-200 whitespace-nowrap press-scale"
           >
-            <i className="ri-sparkling-line text-accent-400 text-lg" />
-            Falar com a IA
+            <i className="ri-book-open-line text-lg" />
+            Explorar o dicionário
           </Link>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-xl mx-auto animate-fade-up stagger-4">
+        <div className="grid grid-cols-3 gap-3 max-w-lg mx-auto animate-fade-up stagger-4">
           {stats.map((stat, i) => (
             <div
               key={stat.label}
