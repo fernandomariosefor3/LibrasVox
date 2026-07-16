@@ -1,7 +1,7 @@
 const benefits = [
-  { icon: 'ri-group-line', title: 'Para toda a turma', description: 'Conteúdo estruturado que professores podem usar em sala de aula.' },
-  { icon: 'ri-price-tag-3-line', title: 'Totalmente gratuito', description: 'Sem custo para escolas, educadores ou alunos.' },
-  { icon: 'ri-shield-check-line', title: 'Acessível por padrão', description: 'Construído com foco em acessibilidade desde o início.' },
+  { icon: 'ri-layout-grid-line', title: 'Conteúdos organizados', description: 'Conteúdos organizados para uso pedagógico.' },
+  { icon: 'ri-heart-line', title: 'Inclusão e acessibilidade', description: 'Apoio à inclusão e à acessibilidade.' },
+  { icon: 'ri-user-star-line', title: 'Para professores e estudantes', description: 'Recursos para professores e estudantes.' },
 ];
 
 export default function SchoolsSection() {
@@ -14,14 +14,14 @@ export default function SchoolsSection() {
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-brand-100 text-sm font-semibold mb-6">
               <i className="ri-school-line" aria-hidden="true" />
-              Para escolas
+              Para educadores e instituições
             </div>
             <h2 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4">
-              Leve o LibrasVox para a sua escola
+              LibrasVox para escolas
             </h2>
             <p className="text-white/70 text-lg max-w-lg mx-auto mb-10">
-              Uma plataforma gratuita e acessível para apoiar o ensino de Libras em sala de aula,
-              do fundamental ao ensino superior.
+              Recursos educacionais para apoiar professores, estudantes e instituições no ensino
+              e na aprendizagem de Libras.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 text-left">
               {benefits.map((b) => (
@@ -32,13 +32,18 @@ export default function SchoolsSection() {
                 </div>
               ))}
             </div>
-            <a
-              href="mailto:librasvox@gmail.com?subject=LibrasVox%20para%20escolas"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-brand-700 rounded-2xl text-base font-bold hover:scale-105 transition-all duration-200 cursor-pointer whitespace-nowrap"
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 border border-white/15 text-white/70 rounded-2xl text-base font-bold cursor-not-allowed whitespace-nowrap"
             >
-              <i className="ri-mail-line" aria-hidden="true" />
-              Fale conosco
-            </a>
+              <i className="ri-time-line" aria-hidden="true" />
+              Recursos para escolas — em breve
+            </button>
+            <p className="text-white/50 text-xs mt-4">
+              Estamos preparando recursos específicos para educadores e instituições.
+            </p>
           </div>
         </div>
       </div>
