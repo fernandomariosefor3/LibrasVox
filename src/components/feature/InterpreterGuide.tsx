@@ -18,30 +18,45 @@ const TIPS: Record<string, Record<string, GuideTip>> = {
       message: 'A Libras (Língua Brasileira de Sinais) é reconhecida pela Lei 10.436/2002 como meio legal de comunicação da comunidade surda brasileira. Não é uma tradução do português — é uma língua completa com gramática própria!',
       icon: 'ri-article-line',
     },
-    features: {
+    'choose-how': {
+      title: 'Vários pontos de partida',
+      message: 'Você pode começar pelo alfabeto, por frases do dia a dia, por um curso completo ou direto no dicionário — escolha o caminho que faz mais sentido para o seu momento.',
+      icon: 'ri-compass-3-line',
+    },
+    learn: {
       title: 'A Libras é uma língua visual-espacial',
       message: 'Diferente do português (auditivo-linear), a Libras usa o espaço, as expressões faciais e a configuração das mãos para construir sentido. Cada sinal tem localização, movimento e expressão facial!',
       icon: 'ri-eye-line',
+    },
+    practice: {
+      title: 'A prática leva à fluência',
+      message: 'A prática constante é a chave para a fluência em Libras. Refaça os exercícios e revise os flashcards sempre que puder — a repetição espaçada ajuda a fixar os sinais na memória.',
+      icon: 'ri-repeat-line',
+    },
+    progress: {
+      title: 'Seu progresso fica salvo',
+      message: 'Cada sinal marcado como aprendido, cada exercício e cada sequência de estudo ficam salvos automaticamente. Volte quando quiser para continuar de onde parou.',
+      icon: 'ri-bar-chart-line',
+    },
+    schools: {
+      title: 'Para escolas e educadores',
+      message: 'Professores de todo o Brasil podem usar o LibrasVox gratuitamente em sala de aula — do fundamental ao ensino superior, sem custo para a escola.',
+      icon: 'ri-school-line',
     },
     history: {
       title: 'A história da Libras',
       message: 'A Libras tem raízes na LSF (Língua de Sinais Francesa) trazida por Huet em 1857, mas evoluiu com sinais próprios do Brasil. Em 2002 foi reconhecida oficialmente. Hoje existem cursos de Letras-Libras em universidades do país inteiro.',
       icon: 'ri-time-line',
     },
-    about: {
+    accessibility: {
       title: 'A comunidade surda',
       message: 'A comunidade surda brasileira é quem melhor conhece a Libras. Intérpretes de Libras são profissionais essenciais para acessibilidade em hospitais, escolas, eventos e muito mais.',
       icon: 'ri-team-line',
     },
-    testimonials: {
-      title: 'Estudantes de Libras',
-      message: 'Muitos estudantes de Letras-Libras, pedagogia e fonoaudiologia usam nossa plataforma para reforçar o aprendizado. A prática constante é a chave para fluência!',
-      icon: 'ri-chat-smile-2-line',
-    },
-    cta: {
-      title: 'Comece agora!',
-      message: 'Não precisa pagar nada para começar. Vá até o dicionário e aprenda seus primeiros sinais. Sugiro começar por "Oi", "Obrigado" e "Por favor" — são os mais usados no dia a dia.',
-      icon: 'ri-rocket-line',
+    overview: {
+      title: 'Um recurso, várias formas de aprender',
+      message: 'Dicionário, cursos, alfabeto, frases, exercícios e flashcards — tudo em um só lugar, gratuito e pensado para diferentes formas de aprender.',
+      icon: 'ri-apps-2-line',
     },
   },
   '/dictionary': {
