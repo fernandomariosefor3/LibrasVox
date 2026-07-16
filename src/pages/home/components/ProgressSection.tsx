@@ -16,12 +16,15 @@ export default function ProgressSection() {
           <div className="relative order-2 lg:order-1">
             <div className="relative w-full aspect-square max-w-lg mx-auto lg:mx-0">
               <div className="absolute inset-0 bg-gradient-to-br from-brand-100 to-brand-200 rounded-[40px] rotate-3"></div>
-              <img
-                src="https://readdy.ai/api/search-image?query=young%20diverse%20Brazilian%20woman%20with%20warm%20smile%20learning%20sign%20language%20on%20modern%20laptop%20computer%20at%20cozy%20study%20desk%2C%20soft%20natural%20window%20lighting%2C%20emerald%20green%20plant%20nearby%2C%20inclusive%20education%20technology%2C%20warm%20inviting%20atmosphere%2C%20photorealistic%20lifestyle%20photography&width=600&height=600&seq=about001&orientation=squarish"
-                alt="Pessoa aprendendo Libras no LibrasVox"
-                className="relative w-full h-full object-cover object-top rounded-[36px] border-4 border-white"
+              <div
+                className="relative w-full h-full rounded-[36px] border-4 border-white bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center overflow-hidden"
                 style={{ boxShadow: '0 20px 60px rgba(16, 185, 129, 0.15)' }}
-              />
+                aria-label="Progresso de aprendizado no LibrasVox"
+              >
+                <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+                <i className="ri-bar-chart-2-line text-white/90 text-[8rem]" aria-hidden="true" />
+              </div>
               {/* Floating card */}
               <div className="absolute -bottom-4 -right-4 bg-surface-0 rounded-2xl px-4 py-3 flex items-center gap-3 border border-surface-100"
                 style={{ boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}>

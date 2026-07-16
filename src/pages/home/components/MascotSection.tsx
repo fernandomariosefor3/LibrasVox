@@ -8,7 +8,7 @@ interface Scene {
   desc: string;
   tip: string;
   color: string;
-  imageUrl: string;
+  icon: string;
 }
 
 const SCENES: Scene[] = [
@@ -19,8 +19,7 @@ const SCENES: Scene[] = [
     color: '#10b981',
     desc: 'Mão aberta (configuração B) levantada ao lado da cabeça, levemente inclinada para frente — saudação padrão em Libras.',
     tip: 'Configuração B · Mão aberta próxima à cabeça',
-    imageUrl:
-      'https://readdy.ai/api/search-image?query=Close%20up%20photograph%20of%20a%20real%20human%20hand%20performing%20the%20Brazilian%20sign%20language%20Libras%20greeting%20gesture%20for%20hello%20with%20an%20open%20flat%20palm%20facing%20forward%20positioned%20near%20the%20head%20on%20a%20clean%20neutral%20light%20gray%20background%20with%20soft%20professional%20studio%20lighting%20creating%20realistic%20skin%20texture%20and%20natural%20shadows%20high%20resolution%20educational%20sign%20language%20reference%20photography%20style&width=600&height=450&seq=libras_real_oi_001&orientation=landscape',
+    icon: 'ri-hand-heart-line',
   },
   {
     id: 'obrigado',
@@ -29,8 +28,7 @@ const SCENES: Scene[] = [
     color: '#f59e0b',
     desc: 'Mão aberta plana (B) toca o queixo com os dedos e move-se para frente — como enviar um beijo de agradecimento.',
     tip: 'Configuração B · Do queixo para frente',
-    imageUrl:
-      'https://readdy.ai/api/search-image?query=Close%20up%20photograph%20of%20a%20real%20human%20hand%20performing%20the%20Brazilian%20sign%20language%20Libras%20gesture%20for%20thank%20you%20with%20a%20flat%20open%20hand%20touching%20the%20chin%20and%20moving%20forward%20as%20if%20blowing%20a%20kiss%20on%20a%20clean%20neutral%20light%20gray%20background%20with%20soft%20professional%20studio%20lighting%20highlighting%20realistic%20skin%20texture%20and%20natural%20finger%20details%20high%20resolution%20educational%20reference%20photography&width=600&height=450&seq=libras_real_obrigado_002&orientation=landscape',
+    icon: 'ri-heart-3-line',
   },
   {
     id: 'amor',
@@ -39,8 +37,7 @@ const SCENES: Scene[] = [
     color: '#ef4444',
     desc: 'Configuração ILY: polegar, indicador e mínimo estendidos simultaneamente — símbolo universal do amor em língua de sinais.',
     tip: 'Configuração ILY · Braço erguido',
-    imageUrl:
-      'https://readdy.ai/api/search-image?query=Close%20up%20photograph%20of%20a%20real%20human%20hand%20performing%20the%20Brazilian%20sign%20language%20Libras%20ILY%20sign%20with%20thumb%20index%20finger%20and%20pinky%20finger%20fully%20extended%20while%20middle%20and%20ring%20fingers%20are%20folded%20down%20on%20a%20clean%20neutral%20light%20gray%20background%20with%20soft%20professional%20studio%20lighting%20showing%20realistic%20skin%20texture%20and%20natural%20hand%20details%20high%20resolution%20educational%20reference%20photography%20style&width=600&height=450&seq=libras_real_amor_003&orientation=landscape',
+    icon: 'ri-heart-fill',
   },
   {
     id: 'aprender',
@@ -49,8 +46,7 @@ const SCENES: Scene[] = [
     color: '#8b5cf6',
     desc: 'Mão em O toca a testa e abre-se em B — representa informação sendo absorvida e armazenada na memória.',
     tip: 'Configuração O → B · Na testa',
-    imageUrl:
-      'https://readdy.ai/api/search-image?query=Close%20up%20photograph%20of%20a%20real%20human%20hand%20performing%20the%20Brazilian%20sign%20language%20Libras%20gesture%20for%20learning%20with%20fingers%20curved%20into%20an%20O%20shape%20touching%20the%20forehead%20and%20then%20opening%20into%20a%20flat%20hand%20on%20a%20clean%20neutral%20light%20gray%20background%20with%20soft%20professional%20studio%20lighting%20creating%20realistic%20skin%20texture%20high%20resolution%20educational%20sign%20language%20reference%20photography&width=600&height=450&seq=libras_real_aprender_004&orientation=landscape',
+    icon: 'ri-book-open-line',
   },
   {
     id: 'libras',
@@ -59,8 +55,7 @@ const SCENES: Scene[] = [
     color: '#06b6d4',
     desc: 'Configuração L em ambas as mãos realizando movimento circular alternado — o próprio sinal para Língua Brasileira de Sinais.',
     tip: 'Configuração L · Ambas as mãos',
-    imageUrl:
-      'https://readdy.ai/api/search-image?query=Close%20up%20photograph%20of%20two%20real%20human%20hands%20performing%20the%20Brazilian%20sign%20language%20Libras%20sign%20for%20the%20word%20Libras%20itself%20with%20both%20hands%20in%20L%20configuration%20making%20alternating%20circular%20motions%20on%20a%20clean%20neutral%20light%20gray%20background%20with%20soft%20professional%20studio%20lighting%20showing%20realistic%20skin%20texture%20high%20resolution%20educational%20reference%20photography%20style&width=600&height=450&seq=libras_real_libras_005&orientation=landscape',
+    icon: 'ri-translate-2',
   },
   {
     id: 'bom_dia',
@@ -69,8 +64,7 @@ const SCENES: Scene[] = [
     color: '#f97316',
     desc: 'Mão aberta parte da boca (B) e move-se para frente-cima em arco — como se espalhasse luz e energia do amanhecer.',
     tip: 'Configuração B · Da boca para cima',
-    imageUrl:
-      'https://readdy.ai/api/search-image?query=Close%20up%20photograph%20of%20a%20real%20human%20hand%20performing%20the%20Brazilian%20sign%20language%20Libras%20gesture%20for%20good%20morning%20with%20an%20open%20flat%20hand%20starting%20at%20the%20mouth%20and%20moving%20upward%20in%20an%20arc%20like%20spreading%20sunlight%20on%20a%20clean%20neutral%20light%20gray%20background%20with%20soft%20professional%20studio%20lighting%20creating%20realistic%20skin%20texture%20high%20resolution%20educational%20reference%20photography&width=600&height=450&seq=libras_real_bomdia_006&orientation=landscape',
+    icon: 'ri-sun-line',
   },
   {
     id: 'ajuda',
@@ -79,8 +73,7 @@ const SCENES: Scene[] = [
     color: '#ec4899',
     desc: 'Mão fechada (A) repousa na palma aberta (B) da outra mão, que sobe — como ser carregado por alguém que apoia.',
     tip: 'Configuração A sobre B · Movimento ascendente',
-    imageUrl:
-      'https://readdy.ai/api/search-image?query=Close%20up%20photograph%20of%20two%20real%20human%20hands%20performing%20the%20Brazilian%20sign%20language%20Libras%20gesture%20for%20help%20with%20a%20closed%20fist%20resting%20on%20an%20open%20palm%20while%20the%20bottom%20hand%20moves%20upward%20in%20a%20supporting%20motion%20on%20a%20clean%20neutral%20light%20gray%20background%20with%20soft%20professional%20studio%20lighting%20showing%20realistic%20skin%20texture%20high%20resolution%20educational%20reference%20photography&width=600&height=450&seq=libras_real_ajuda_007&orientation=landscape',
+    icon: 'ri-hand-coin-line',
   },
   {
     id: 'sim',
@@ -89,8 +82,7 @@ const SCENES: Scene[] = [
     color: '#14b8a6',
     desc: 'Mão fechada (A ou S) com movimento de cima para baixo imitando um aceno de cabeça afirmativo — concordância em Libras.',
     tip: 'Configuração A · Movimento vertical descendente',
-    imageUrl:
-      'https://readdy.ai/api/search-image?query=Close%20up%20photograph%20of%20a%20real%20human%20hand%20performing%20the%20Brazilian%20sign%20language%20Libras%20gesture%20for%20yes%20with%20a%20closed%20fist%20moving%20in%20a%20downward%20nodding%20motion%20mimicking%20an%20affirmative%20head%20nod%20on%20a%20clean%20neutral%20light%20gray%20background%20with%20soft%20professional%20studio%20lighting%20creating%20realistic%20skin%20texture%20and%20natural%20shadows%20high%20resolution%20educational%20reference%20photography&width=600&height=450&seq=libras_real_sim_008&orientation=landscape',
+    icon: 'ri-check-double-line',
   },
 ];
 
@@ -141,17 +133,17 @@ export default function MascotSection() {
         <div className="text-center mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 border border-emerald-100 rounded-full text-emerald-600 text-sm font-semibold mb-4">
             <i className="ri-hand-heart-line"></i>
-            Sinais Reais em Libras
+            Configurações de mão em Libras
           </div>
           <h2
             className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3"
-           
+
           >
-            Veja os sinais com mãos reais
+            Veja como cada sinal se forma
           </h2>
           <p className="text-slate-500 max-w-lg mx-auto">
-            Fotografias reais demonstrando configurações de mão autênticas da Língua Brasileira de Sinais, com descrição
-            acadêmica de cada sinal.
+            Descrição linguística de cada configuração de mão, com base em referências oficiais da
+            Língua Brasileira de Sinais.
           </p>
         </div>
 
@@ -171,14 +163,16 @@ export default function MascotSection() {
                 }}
               />
 
-              {/* Image */}
-              <img
-                src={scene.imageUrl}
-                alt={`Sinal de Libras: ${scene.sign}`}
-                className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-300 ${
+              {/* Abstract visual (icon-based, no photography) */}
+              <div
+                className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
                   isFading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
                 }`}
-              />
+                style={{ background: `linear-gradient(135deg, ${scene.color}26, ${scene.color}08)` }}
+                aria-label={`Configuração de mão do sinal: ${scene.sign}`}
+              >
+                <i className={`${scene.icon} text-[7rem]`} style={{ color: scene.color }} aria-hidden="true" />
+              </div>
 
               {/* Overlay label */}
               <div className="absolute top-4 left-4">
@@ -202,7 +196,7 @@ export default function MascotSection() {
                   </div>
                   <div className="flex items-center gap-1.5 px-3 py-1.5 bg-black/40 backdrop-blur-sm rounded-full text-white/90 text-xs">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Sinal real
+                    Configuração
                   </div>
                 </div>
               </div>
@@ -293,10 +287,10 @@ export default function MascotSection() {
               </div>
               <div className="p-4 rounded-2xl border border-slate-100 bg-white">
                 <div className="w-8 h-8 flex items-center justify-center mb-2" style={{ color: scene.color }}>
-                  <i className="ri-camera-lens-line text-xl"></i>
+                  <i className="ri-book-open-line text-xl"></i>
                 </div>
                 <p className="text-xs text-slate-400 font-medium">Referência</p>
-                <p className="text-sm font-bold text-slate-700">Fotografia real</p>
+                <p className="text-sm font-bold text-slate-700">Descrição oficial</p>
               </div>
             </div>
 

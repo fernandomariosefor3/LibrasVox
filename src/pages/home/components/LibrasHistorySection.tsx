@@ -12,7 +12,6 @@ const historyChapters = [
     accentFrom: 'from-emerald-400',
     accentTo: 'to-teal-500',
     signWord: 'HISTÓRIA',
-    signImage: 'https://readdy.ai/api/search-image?query=close%20up%20photograph%20of%20two%20human%20hands%20performing%20Brazilian%20sign%20language%20Libras%20gesture%20for%20the%20word%20history%2C%20clean%20white%20background%2C%20soft%20studio%20lighting%2C%20detailed%20fingers%20and%20palm%20position%20clearly%20visible%2C%20educational%20sign%20language%20reference%20photo%2C%20high%20resolution%2C%20realistic%20skin%20tones&width=400&height=400&seq=sign_hist_001&orientation=squarish',
     text: 'Em 1857, o imperador Dom Pedro II trouxe ao Brasil o professor surdo francês Ernest Huet, que fundou o Imperial Instituto de Surdos-Mudos no Rio de Janeiro — hoje o Instituto Nacional de Educação de Surdos (INES). Huet trouxe a Língua de Sinais Francesa, que se misturou com os sinais já usados pelos surdos brasileiros, dando origem à Libras.',
     fact: 'O INES ainda existe e é referência nacional para a educação de surdos.',
   },
@@ -27,7 +26,6 @@ const historyChapters = [
     accentFrom: 'from-amber-400',
     accentTo: 'to-orange-500',
     signWord: 'RESISTÊNCIA',
-    signImage: 'https://readdy.ai/api/search-image?query=close%20up%20photograph%20of%20human%20hands%20performing%20Brazilian%20sign%20language%20Libras%20gesture%20showing%20strength%20and%20resistance%2C%20clean%20white%20background%2C%20soft%20studio%20lighting%2C%20detailed%20fingers%20forming%20a%20fist%20with%20thumb%20up%2C%20educational%20sign%20language%20reference%20photo%2C%20high%20resolution%2C%20realistic%20skin%20tones&width=400&height=400&seq=sign_resist_002&orientation=squarish',
     text: 'Durante décadas, o uso de línguas de sinais foi proibido em muitas escolas ao redor do mundo, incluindo o Brasil. O método oralista dominava: surdos eram forçados a aprender a falar e a leitura labial. Mesmo assim, a comunidade surda resistiu e manteve viva a Libras em espaços informais, associações e encontros comunitários.',
     fact: 'A resistência da comunidade surda foi fundamental para a sobrevivência da Libras.',
   },
@@ -42,7 +40,6 @@ const historyChapters = [
     accentFrom: 'from-teal-400',
     accentTo: 'to-cyan-500',
     signWord: 'CONHECIMENTO',
-    signImage: 'https://readdy.ai/api/search-image?query=close%20up%20photograph%20of%20human%20hands%20performing%20Brazilian%20sign%20language%20Libras%20gesture%20for%20knowledge%20and%20learning%2C%20open%20palm%20touching%20forehead%20then%20moving%20forward%2C%20clean%20white%20background%2C%20soft%20studio%20lighting%2C%20educational%20sign%20language%20reference%20photo%2C%20high%20resolution%2C%20realistic%20skin%20tones&width=400&height=400&seq=sign_know_003&orientation=squarish',
     text: 'Na década de 1990, pesquisadores brasileiros começaram a estudar e documentar a Libras como uma língua completa e legítima. A linguista Lucinda Ferreira Brito foi pioneira nesse trabalho, publicando estudos que comprovaram que a Libras possui gramática própria, estrutura fonológica e toda a complexidade de qualquer língua natural humana.',
     fact: 'A Libras tem estrutura gramatical própria, completamente independente do português.',
   },
@@ -57,7 +54,6 @@ const historyChapters = [
     accentFrom: 'from-rose-400',
     accentTo: 'to-pink-500',
     signWord: 'LEI',
-    signImage: 'https://readdy.ai/api/search-image?query=close%20up%20photograph%20of%20human%20hands%20performing%20Brazilian%20sign%20language%20Libras%20gesture%20for%20law%20and%20rights%2C%20both%20hands%20with%20index%20fingers%20pointing%20upward%20and%20crossing%2C%20clean%20white%20background%2C%20soft%20studio%20lighting%2C%20educational%20sign%20language%20reference%20photo%2C%20high%20resolution%2C%20realistic%20skin%20tones&width=400&height=400&seq=sign_law_004&orientation=squarish',
     text: 'Em 24 de abril de 2002, o presidente Fernando Henrique Cardoso sancionou a Lei nº 10.436, reconhecendo oficialmente a Libras como meio legal de comunicação e expressão da comunidade surda brasileira. Foi um marco histórico para a inclusão e os direitos das pessoas surdas no Brasil.',
     fact: '24 de abril é o Dia Nacional da Língua Brasileira de Sinais.',
   },
@@ -72,7 +68,6 @@ const historyChapters = [
     accentFrom: 'from-violet-400',
     accentTo: 'to-purple-500',
     signWord: 'INCLUSÃO',
-    signImage: 'https://readdy.ai/api/search-image?query=close%20up%20photograph%20of%20human%20hands%20performing%20Brazilian%20sign%20language%20Libras%20gesture%20for%20inclusion%20and%20together%2C%20both%20hands%20coming%20together%20in%20a%20welcoming%20embrace%20gesture%2C%20clean%20white%20background%2C%20soft%20studio%20lighting%2C%20educational%20sign%20language%20reference%20photo%2C%20high%20resolution%2C%20realistic%20skin%20tones&width=400&height=400&seq=sign_incl_005&orientation=squarish',
     text: 'O Decreto nº 5.626 de 2005 regulamentou a Lei de Libras e determinou a inclusão da Libras como disciplina curricular obrigatória nos cursos de formação de professores e fonoaudiologia. Também estabeleceu a criação de cursos de graduação em Letras-Libras e a formação de intérpretes de Libras.',
     fact: 'Hoje existem cursos de Letras-Libras em universidades federais de todo o Brasil.',
   },
@@ -87,7 +82,6 @@ const historyChapters = [
     accentFrom: 'from-indigo-400',
     accentTo: 'to-blue-500',
     signWord: 'FUTURO',
-    signImage: 'https://readdy.ai/api/search-image?query=close%20up%20photograph%20of%20human%20hands%20performing%20Brazilian%20sign%20language%20Libras%20gesture%20for%20future%20and%20technology%2C%20one%20hand%20pointing%20forward%20with%20open%20fingers%20spreading%20outward%2C%20clean%20white%20background%2C%20soft%20studio%20lighting%2C%20educational%20sign%20language%20reference%20photo%2C%20high%20resolution%2C%20realistic%20skin%20tones&width=400&height=400&seq=sign_fut_006&orientation=squarish',
     text: 'Hoje, a Libras é falada por mais de 5 milhões de pessoas no Brasil. Com o avanço da tecnologia, plataformas como o LVP tornam o aprendizado acessível a todos. Intérpretes de Libras estão presentes em eventos públicos, programas de TV e serviços essenciais. A luta por inclusão continua, mas os avanços são enormes.',
     fact: 'Mais de 5 milhões de brasileiros se comunicam em Libras.',
   },
@@ -114,25 +108,23 @@ function SignDisplay({
       <div
         className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border ${chapter.border} ${chapter.bg} ${chapter.color} transition-all duration-300`}
       >
-        Sinal em Libras
+        Marco da história
       </div>
 
-      {/* Sign image card */}
+      {/* Abstract chapter card (icon-based, no photography) */}
       <div
-        className={`relative w-56 h-56 md:w-64 md:h-64 rounded-3xl overflow-hidden border-4 ${chapter.border} bg-white transition-all duration-500 ${
+        className={`relative w-56 h-56 md:w-64 md:h-64 rounded-3xl overflow-hidden border-4 ${chapter.border} bg-gradient-to-br ${chapter.accentFrom} ${chapter.accentTo} transition-all duration-500 ${
           isChanging ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
         } ${pulse ? 'ring-4 ring-offset-2 ring-emerald-300' : ''}`}
+        aria-label={`Marco histórico: ${chapter.signWord}`}
       >
-        {/* Gradient overlay top */}
-        <div
-          className={`absolute inset-x-0 top-0 h-10 bg-gradient-to-b ${chapter.accentFrom} to-transparent opacity-30 z-10`}
-        />
+        {/* Decorative circles */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
 
-        <img
-          src={chapter.signImage}
-          alt={`Sinal de Libras para ${chapter.signWord}`}
-          className="w-full h-full object-cover object-top"
-        />
+        <div className="relative z-10 w-full h-full flex items-center justify-center">
+          <i className={`${chapter.icon} text-white/90 text-8xl`} aria-hidden="true" />
+        </div>
 
         {/* Word badge */}
         <div
