@@ -52,3 +52,18 @@ scripts/
 sifec-screenshot.png
 m.id
 (loadXP)
+
+# Shared LibrasVox Claude assets
+!.claude/
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/librasvox-linguistic-ai-engineer/
+.claude/skills/librasvox-linguistic-ai-engineer/*
+!.claude/skills/librasvox-linguistic-ai-engineer/SKILL.md
+!.claude/agents/
+.claude/agents/*
+!.claude/agents/libras-corpus-curator.md
+!.claude/agents/libras-media-integrity-auditor.md
+!.claude/agents/libras-mcp-engineer.md
+!.claude/agents/libras-grounding-qa.md
