@@ -2,6 +2,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "@mediapipe/tasks-vision": "^0.10.35",
+    "@modelcontextprotocol/sdk": "1.29.0",
     "@supabase/supabase-js": "2.57.4",
     "firebase": "12.0.0",
     "i18next": "25.4.1",
@@ -11,10 +12,12 @@
     "react-dom": "^19.1.0",
     "react-i18next": "^15.6.0",
     "react-router-dom": "^7.6.3",
-    "recharts": "3.2.0"
+    "recharts": "3.2.0",
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
+    "@types/node": "24.13.3",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react-swc": "^3.10.2",
@@ -38,6 +41,10 @@
     "build": "vite build",
     "dev": "vite",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "mcp:dev": "node mcp/index.ts",
+    "mcp:smoke": "node mcp/smoke.ts",
+    "mcp:test": "node --test mcp/test/*.test.ts",
+    "mcp:type-check": "tsc --noEmit --project mcp/tsconfig.json",
     "preview": "vite preview",
     "type-check": "tsc --noEmit --project tsconfig.app.json"
   },
