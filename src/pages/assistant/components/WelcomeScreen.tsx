@@ -55,7 +55,7 @@ export default function WelcomeScreen({ mode, onSuggestion, hasApiKey }: Welcome
         </p>
       </div>
 
-      {/* API Key warning */}
+      {/* Secure update notice */}
       {!hasApiKey && (
         <div
           className={`mb-6 w-full max-w-md bg-amber-50 border border-amber-200 rounded-xl p-4 text-left transition-all duration-700 delay-200 ${
@@ -64,23 +64,12 @@ export default function WelcomeScreen({ mode, onSuggestion, hasApiKey }: Welcome
         >
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 flex items-center justify-center bg-amber-100 rounded-lg flex-shrink-0">
-              <i className="ri-key-line text-amber-600 text-base"></i>
+              <i className="ri-shield-check-line text-amber-600 text-base"></i>
             </div>
             <div>
-              <p className="text-sm font-semibold text-amber-800 mb-1">API Key necessária</p>
+              <p className="text-sm font-semibold text-amber-800 mb-1">Atualização em andamento</p>
               <p className="text-xs text-amber-700 leading-relaxed">
-                Configure{' '}
-                <code className="bg-amber-100 px-1 rounded font-mono">VITE_GEMINI_API_KEY</code> no
-                arquivo <code className="bg-amber-100 px-1 rounded font-mono">.env</code> para ativar a IA.
-                Chave gratuita em{' '}
-                <a
-                  href="https://aistudio.google.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-amber-800 underline"
-                >
-                  aistudio.google.com
-                </a>
+                O LVP Tutor está em atualização para utilizar somente conteúdos linguísticos validados.
               </p>
             </div>
           </div>
@@ -122,7 +111,7 @@ export default function WelcomeScreen({ mode, onSuggestion, hasApiKey }: Welcome
         }`}
       >
         <i className="ri-sparkling-2-line text-sm"></i>
-        <span>Powered by Google Gemini</span>
+        <span>LVP Tutor — atualização segura em andamento</span>
       </div>
     </div>
   );

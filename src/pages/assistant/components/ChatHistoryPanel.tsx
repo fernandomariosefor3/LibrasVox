@@ -35,7 +35,7 @@ export default function ChatHistoryPanel({
             >
               Assistente IA
             </h1>
-            <p className="text-xs text-slate-400">Powered by Gemini</p>
+            <p className="text-xs text-slate-400">LVP Tutor — atualização segura em andamento</p>
           </div>
         </div>
       </div>
