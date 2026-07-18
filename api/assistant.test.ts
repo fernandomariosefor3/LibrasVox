@@ -686,45 +686,80 @@ describe('roteamento — vercel.json e frontend (checagem estática, não simula
   const vercelJsonPath = join(REPO_ROOT, 'vercel.json');
   const useGeminiChatPath = join(REPO_ROOT, 'src', 'hooks', 'useGeminiChat.ts');
 
+  const EXPECTED_FALLBACK_SOURCE = '/((?!api(?:/|$)).*)';
+
+  interface VercelRewriteRule {
+    source: string;
+    destination: string;
+  }
+
+  function readRewriteRules(): VercelRewriteRule[] {
+    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as { rewrites?: VercelRewriteRule[] };
+    return vercelJson.rewrites ?? [];
+  }
+
+  /**
+   * Compila o campo `source` de uma regra de rewrite (que já é, neste
+   * projeto, um padrão de regex válido — não um template de path-to-regexp
+   * com :params) como RegExp real, ancorado, para testar caminhos
+   * concretos contra ele. Não simula o restante da infraestrutura da
+   * Vercel — só a correspondência de padrão em si.
+   */
+  function compileSource(source: string): RegExp {
+    return new RegExp(`^${source}$`);
+  }
+
   it('api/assistant.ts existe', () => {
     expect(existsSync(join(REPO_ROOT, 'api', 'assistant.ts'))).toBe(true);
   });
 
-  it('vercel.json não contém um rewrite de /api para /api (autorreferente)', () => {
-    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as {
-      rewrites?: Array<{ source: string; destination: string }>;
-    };
-    const selfReferential = (vercelJson.rewrites ?? []).some(
+  it('vercel.json contém somente uma regra de rewrite — o fallback da SPA', () => {
+    const rules = readRewriteRules();
+    expect(rules).toHaveLength(1);
+  });
+
+  it('o fallback usa exatamente o negative lookahead /((?!api(?:/|$)).*)', () => {
+    const rules = readRewriteRules();
+    expect(rules[0].source).toBe(EXPECTED_FALLBACK_SOURCE);
+  });
+
+  it('o destino do fallback continua sendo /index.html', () => {
+    const rules = readRewriteRules();
+    expect(rules[0].destination).toBe('/index.html');
+  });
+
+  describe('correspondência de caminhos contra o fallback compilado', () => {
+    const rules = readRewriteRules();
+    const fallbackPattern = compileSource(rules[0].source);
+
+    const excludedPaths = ['/api', '/api/assistant', '/api/qualquer-rota'];
+    for (const path of excludedPaths) {
+      it(`"${path}" NÃO corresponde ao fallback (deve ir para a função, não para index.html)`, () => {
+        expect(fallbackPattern.test(path)).toBe(false);
+      });
+    }
+
+    const includedPaths = ['/assistant', '/dictionary', '/', '/apiculture'];
+    for (const path of includedPaths) {
+      it(`"${path}" corresponde ao fallback (deve ir para index.html)`, () => {
+        expect(fallbackPattern.test(path)).toBe(true);
+      });
+    }
+  });
+
+  it('não existe rewrite autorreferente /api/* → /api/*', () => {
+    const selfReferential = readRewriteRules().some(
       (rule) => /^\/api\//.test(rule.source) && /^\/api\//.test(rule.destination),
     );
     expect(selfReferential).toBe(false);
   });
 
-  it('vercel.json mantém o fallback SPA (/(.*) → /index.html)', () => {
-    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as {
-      rewrites?: Array<{ source: string; destination: string }>;
-    };
-    const spaFallback = (vercelJson.rewrites ?? []).find((rule) => rule.destination === '/index.html');
-    expect(spaFallback).toBeDefined();
-    expect(spaFallback?.source).toBe('/(.*)');
-  });
-
-  it('o fallback SPA vem depois de qualquer regra específica legítima em rewrites', () => {
-    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as {
-      rewrites?: Array<{ source: string; destination: string }>;
-    };
-    const rules = vercelJson.rewrites ?? [];
-    const spaIndex = rules.findIndex((rule) => rule.destination === '/index.html');
-    expect(spaIndex).toBe(rules.length - 1);
-  });
-
-  it('nenhum destino de rewrite aponta uma rota de API para /index.html', () => {
-    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as {
-      rewrites?: Array<{ source: string; destination: string }>;
-    };
-    const offenders = (vercelJson.rewrites ?? []).filter(
-      (rule) => /^\/api\//.test(rule.source) && rule.destination === '/index.html',
-    );
+  it('nenhuma regra de rewrite envia um caminho /api para /index.html', () => {
+    const offenders = readRewriteRules().filter((rule) => {
+      if (rule.destination !== '/index.html') return false;
+      const pattern = compileSource(rule.source);
+      return pattern.test('/api') || pattern.test('/api/assistant');
+    });
     expect(offenders).toEqual([]);
   });
 
