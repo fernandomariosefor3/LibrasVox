@@ -41,6 +41,7 @@
   "private": true,
   "scripts": {
     "build": "vite build",
+    "build:api:runtime": "node scripts/build-vercel-api.mjs",
     "dev": "vite",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "mcp:dev": "node mcp/index.ts",
@@ -50,7 +51,8 @@
     "preview": "vite preview",
     "test:api": "vitest run",
     "type-check": "tsc --noEmit --project tsconfig.app.json",
-    "type-check:api": "tsc --noEmit --project tsconfig.api.json"
+    "type-check:api": "tsc --noEmit --project tsconfig.api.json",
+    "vercel-build": "npm run build:api:runtime && npm run build"
   },
   "type": "module",
   "version": "0.0.0"

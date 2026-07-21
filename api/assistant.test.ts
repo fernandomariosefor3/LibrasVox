@@ -1,9 +1,10 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll, afterEach } from 'vitest';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { createAssistantHandler, truncateHistory, isSignSpecificQuestion } from './assistant.js';
+import { createAssistantHandler, truncateHistory, isSignSpecificQuestion } from '../server/assistant.js';
 import { InProcessTutorKnowledgeProvider } from './_lib/inProcessTutorKnowledgeProvider.js';
 import { InMemoryValidatedCorpusRepository } from '../mcp/repository/InMemoryValidatedCorpusRepository.js';
 import { ALL_ENTRIES } from '../knowledge/corpus/index.js';
@@ -341,6 +342,10 @@ describe('api/assistant — classificação end-to-end (corpus real, 0 validated
     expect(ALL_ENTRIES).toHaveLength(3);
     expect(ALL_ENTRIES.every((entry) => entry.status === 'draft')).toBe(true);
   });
+
+  it('o corpus real tem exatamente 0 entradas validated', () => {
+    expect(ALL_ENTRIES.filter((entry) => entry.status === 'validated')).toHaveLength(0);
+  });
 });
 
 describe('api/assistant — caminho fundamentado (provider sintético com entrada validated)', () => {
@@ -593,14 +598,15 @@ describe('api/assistant — nenhum draft em logs', () => {
   });
 });
 
-describe('api/ — nenhum subprocesso MCP, nenhum adaptador MCP importado', () => {
+describe('api/ e server/ — nenhum subprocesso MCP, nenhum adaptador MCP importado', () => {
   const API_DIR = fileURLToPath(new URL('.', import.meta.url));
+  const SERVER_DIR = fileURLToPath(new URL('../server/', import.meta.url));
 
   function listSourceFiles(dir: string): string[] {
     const entries = readdirSync(dir, { withFileTypes: true });
     const files: string[] = [];
     for (const entry of entries) {
-      if (entry.name === 'node_modules') continue;
+      if (entry.name === 'node_modules' || entry.name === '_generated') continue;
       const fullPath = join(dir, entry.name);
       if (entry.isDirectory()) {
         files.push(...listSourceFiles(fullPath));
@@ -611,7 +617,7 @@ describe('api/ — nenhum subprocesso MCP, nenhum adaptador MCP importado', () =
     return files;
   }
 
-  const sourceFiles = listSourceFiles(API_DIR);
+  const sourceFiles = [...listSourceFiles(API_DIR), ...listSourceFiles(SERVER_DIR)];
 
   /**
    * Extrai só as linhas de import/require/import() dinâmico de um
@@ -686,50 +692,168 @@ describe('roteamento — vercel.json e frontend (checagem estática, não simula
   const vercelJsonPath = join(REPO_ROOT, 'vercel.json');
   const useGeminiChatPath = join(REPO_ROOT, 'src', 'hooks', 'useGeminiChat.ts');
 
+  const EXPECTED_FALLBACK_SOURCE = '/((?!api(?:/|$)).*)';
+
+  interface VercelRewriteRule {
+    source: string;
+    destination: string;
+  }
+
+  function readRewriteRules(): VercelRewriteRule[] {
+    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as { rewrites?: VercelRewriteRule[] };
+    return vercelJson.rewrites ?? [];
+  }
+
+  /**
+   * Compila o campo `source` de uma regra de rewrite (que já é, neste
+   * projeto, um padrão de regex válido — não um template de path-to-regexp
+   * com :params) como RegExp real, ancorado, para testar caminhos
+   * concretos contra ele. Não simula o restante da infraestrutura da
+   * Vercel — só a correspondência de padrão em si.
+   */
+  function compileSource(source: string): RegExp {
+    return new RegExp(`^${source}$`);
+  }
+
   it('api/assistant.ts existe', () => {
     expect(existsSync(join(REPO_ROOT, 'api', 'assistant.ts'))).toBe(true);
   });
 
-  it('vercel.json não contém um rewrite de /api para /api (autorreferente)', () => {
-    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as {
-      rewrites?: Array<{ source: string; destination: string }>;
-    };
-    const selfReferential = (vercelJson.rewrites ?? []).some(
+  it('vercel.json contém somente uma regra de rewrite — o fallback da SPA', () => {
+    const rules = readRewriteRules();
+    expect(rules).toHaveLength(1);
+  });
+
+  it('o fallback usa exatamente o negative lookahead /((?!api(?:/|$)).*)', () => {
+    const rules = readRewriteRules();
+    expect(rules[0].source).toBe(EXPECTED_FALLBACK_SOURCE);
+  });
+
+  it('o destino do fallback continua sendo /index.html', () => {
+    const rules = readRewriteRules();
+    expect(rules[0].destination).toBe('/index.html');
+  });
+
+  describe('correspondência de caminhos contra o fallback compilado', () => {
+    const rules = readRewriteRules();
+    const fallbackPattern = compileSource(rules[0].source);
+
+    const excludedPaths = ['/api', '/api/assistant', '/api/qualquer-rota'];
+    for (const path of excludedPaths) {
+      it(`"${path}" NÃO corresponde ao fallback (deve ir para a função, não para index.html)`, () => {
+        expect(fallbackPattern.test(path)).toBe(false);
+      });
+    }
+
+    const includedPaths = ['/assistant', '/dictionary', '/', '/apiculture'];
+    for (const path of includedPaths) {
+      it(`"${path}" corresponde ao fallback (deve ir para index.html)`, () => {
+        expect(fallbackPattern.test(path)).toBe(true);
+      });
+    }
+  });
+
+  it('não existe rewrite autorreferente /api/* → /api/*', () => {
+    const selfReferential = readRewriteRules().some(
       (rule) => /^\/api\//.test(rule.source) && /^\/api\//.test(rule.destination),
     );
     expect(selfReferential).toBe(false);
   });
 
-  it('vercel.json mantém o fallback SPA (/(.*) → /index.html)', () => {
-    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as {
-      rewrites?: Array<{ source: string; destination: string }>;
-    };
-    const spaFallback = (vercelJson.rewrites ?? []).find((rule) => rule.destination === '/index.html');
-    expect(spaFallback).toBeDefined();
-    expect(spaFallback?.source).toBe('/(.*)');
-  });
-
-  it('o fallback SPA vem depois de qualquer regra específica legítima em rewrites', () => {
-    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as {
-      rewrites?: Array<{ source: string; destination: string }>;
-    };
-    const rules = vercelJson.rewrites ?? [];
-    const spaIndex = rules.findIndex((rule) => rule.destination === '/index.html');
-    expect(spaIndex).toBe(rules.length - 1);
-  });
-
-  it('nenhum destino de rewrite aponta uma rota de API para /index.html', () => {
-    const vercelJson = JSON.parse(readFileSync(vercelJsonPath, 'utf8')) as {
-      rewrites?: Array<{ source: string; destination: string }>;
-    };
-    const offenders = (vercelJson.rewrites ?? []).filter(
-      (rule) => /^\/api\//.test(rule.source) && rule.destination === '/index.html',
-    );
+  it('nenhuma regra de rewrite envia um caminho /api para /index.html', () => {
+    const offenders = readRewriteRules().filter((rule) => {
+      if (rule.destination !== '/index.html') return false;
+      const pattern = compileSource(rule.source);
+      return pattern.test('/api') || pattern.test('/api/assistant');
+    });
     expect(offenders).toEqual([]);
   });
 
   it('o frontend (useGeminiChat.ts) chama exatamente /api/assistant', () => {
     const content = readFileSync(useGeminiChatPath, 'utf8');
     expect(content).toContain("fetch('/api/assistant'");
+  });
+});
+
+describe('api/assistant.ts — wrapper mínimo da Vercel (não é implementação)', () => {
+  const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url));
+  const wrapperSource = readFileSync(join(REPO_ROOT, 'api', 'assistant.ts'), 'utf8');
+
+  it('contém só a re-exportação do handler gerado — nenhuma outra linha de código', () => {
+    const meaningfulLines = wrapperSource
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0);
+    expect(meaningfulLines).toEqual(["export { default } from './_generated/server/assistant.js';"]);
+  });
+
+  it('aponta exatamente para ./_generated/server/assistant.js', () => {
+    expect(wrapperSource).toContain("from './_generated/server/assistant.js'");
+  });
+
+  it('não importa knowledge/, mcp/, api/_lib/ ou o SDK do Gemini diretamente', () => {
+    const bannedPatterns = [/knowledge\//, /\bmcp\//, /_lib\//, /@google\/genai/, /geminiProvider/];
+    const offenders = bannedPatterns.filter((pattern) => pattern.test(wrapperSource));
+    expect(offenders).toEqual([]);
+  });
+});
+
+describe('build:api:runtime — build determinístico do runtime em api/_generated', () => {
+  const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url));
+  const GENERATED_DIR = join(REPO_ROOT, 'api', '_generated');
+  const ASSISTANT_JS = join(GENERATED_DIR, 'server', 'assistant.js');
+  const ASSISTANT_DTS = join(GENERATED_DIR, 'server', 'assistant.d.ts');
+  const CORPUS_ENTRIES_DIR = join(GENERATED_DIR, 'knowledge', 'corpus', 'entries');
+
+  beforeAll(() => {
+    execFileSync(process.execPath, [join(REPO_ROOT, 'scripts', 'build-vercel-api.mjs')], {
+      cwd: REPO_ROOT,
+      stdio: 'pipe',
+    });
+  }, 60000);
+
+  it('gera api/_generated/server/assistant.js', () => {
+    expect(existsSync(ASSISTANT_JS)).toBe(true);
+  });
+
+  it('gera api/_generated/server/assistant.d.ts', () => {
+    expect(existsSync(ASSISTANT_DTS)).toBe(true);
+  });
+
+  it('gera as entradas de corpus ola.js, obrigado.js e tchau.js', () => {
+    expect(existsSync(join(CORPUS_ENTRIES_DIR, 'ola.js'))).toBe(true);
+    expect(existsSync(join(CORPUS_ENTRIES_DIR, 'obrigado.js'))).toBe(true);
+    expect(existsSync(join(CORPUS_ENTRIES_DIR, 'tchau.js'))).toBe(true);
+  });
+
+  it('nenhum .js emitido contém import/export/require relativo com extensão TypeScript', () => {
+    function listJsFiles(dir: string): string[] {
+      const out: string[] = [];
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const fullPath = join(dir, entry.name);
+        if (entry.isDirectory()) out.push(...listJsFiles(fullPath));
+        else if (entry.name.endsWith('.js')) out.push(fullPath);
+      }
+      return out;
+    }
+    const tsExtensionImport = /(?:\bfrom\s+|\bimport\s*\(|\brequire\s*\()\s*['"](\.[^'"]*\.(?:ts|tsx|mts|cts))['"]/;
+    const offenders = listJsFiles(GENERATED_DIR).filter((file) => {
+      const content = readFileSync(file, 'utf8');
+      return content.split('\n').some((line) => tsExtensionImport.test(line));
+    });
+    expect(offenders).toEqual([]);
+  });
+
+  it('o runtime emitido pode ser importado localmente e seu default export é uma função (sem invocar o handler)', async () => {
+    const mod: { default: unknown } = await import(pathToFileURL(ASSISTANT_JS).href);
+    expect(typeof mod.default).toBe('function');
+  });
+
+  it('nenhuma cópia manual do corpus foi criada em server/ ou api/_lib fora do output gerado e ignorado', () => {
+    const serverFiles = readdirSync(join(REPO_ROOT, 'server'));
+    expect(serverFiles).toEqual(['assistant.ts']);
+
+    const apiLibFiles = readdirSync(join(REPO_ROOT, 'api', '_lib'));
+    expect(apiLibFiles.some((name) => name.toLowerCase().includes('corpus'))).toBe(false);
   });
 });

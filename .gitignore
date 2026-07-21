@@ -48,10 +48,14 @@ yarn-error.log*
 .playwright-mcp/
 
 # Scripts locais e arquivos temporários
-scripts/
+scripts/*
+!scripts/build-vercel-api.mjs
 sifec-screenshot.png
 m.id
 (loadXP)
+
+# Runtime gerado da função Vercel (build determinístico, nunca commitado)
+api/_generated/
 
 # Shared LibrasVox Claude assets
 !.claude/

@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": ".",
+    "outDir": "api/_generated",
+    "noEmit": false,
+    "noEmitOnError": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "verbatimModuleSyntax": true
+  },
+  "include": [
+    "server/assistant.ts",
+    "api/_lib/**/*.ts",
+    "knowledge/schema/**/*.ts",
+    "knowledge/corpus/**/*.ts",
+    "mcp/repository/**/*.ts",
+    "mcp/services/**/*.ts",
+    "mcp/schemas/**/*.ts",
+    "mcp/corpusVersion.ts"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "api/_generated/**"
+  ]
+}
