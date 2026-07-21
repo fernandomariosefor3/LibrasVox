@@ -13,6 +13,7 @@
   },
   "include": [
     "api/**/*.ts",
+    "server/**/*.ts",
     "mcp/repository/**/*.ts",
     "mcp/services/**/*.ts",
     "mcp/schemas/**/*.ts",
