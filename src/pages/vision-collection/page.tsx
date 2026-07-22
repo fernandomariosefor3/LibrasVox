@@ -197,6 +197,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return <label className="block"><span className="block text-xs font-semibold text-surface-600 mb-1.5">{label}</span>{children}</label>;
 }
 
+type CameraFacingMode = 'user' | 'environment';
+
 function RealMediaCapturePackage() {
   const [signId, setSignId] = useState<RealMediaSignId>(REAL_MEDIA_SIGNS[0].id);
   const [region, setRegion] = useState(REAL_MEDIA_DEFAULT_REGION);
@@ -204,6 +206,7 @@ function RealMediaCapturePackage() {
   const [notes, setNotes] = useState('');
   const [consent, setConsent] = useState(false);
   const [cameraOn, setCameraOn] = useState(false);
+  const [facingMode, setFacingMode] = useState<CameraFacingMode>('user');
   const [recording, setRecording] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [clip, setClip] = useState<{ blob: Blob; url: string; duration: number } | null>(null);
@@ -246,13 +249,16 @@ function RealMediaCapturePackage() {
     setCameraOn(false);
   };
 
+  const requestCameraStream = (mode: CameraFacingMode) =>
+    navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: mode }, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false,
+    });
+
   const startCamera = async () => {
     setError('');
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: false,
-      });
+      const stream = await requestCameraStream(facingMode);
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -261,6 +267,39 @@ function RealMediaCapturePackage() {
       setCameraOn(true);
     } catch {
       setError('Não foi possível acessar a câmera. Verifique a permissão do navegador.');
+    }
+  };
+
+  const handleSwitchCamera = async () => {
+    if (!cameraOn || recording) return;
+    const nextFacingMode: CameraFacingMode = facingMode === 'user' ? 'environment' : 'user';
+    setError('');
+
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
+    if (videoRef.current) videoRef.current.srcObject = null;
+
+    try {
+      const stream = await requestCameraStream(nextFacingMode);
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+      setFacingMode(nextFacingMode);
+    } catch {
+      try {
+        const fallbackStream = await requestCameraStream(facingMode);
+        streamRef.current = fallbackStream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = fallbackStream;
+          await videoRef.current.play();
+        }
+        setError('Não foi possível alternar a câmera neste dispositivo.');
+      } catch {
+        setCameraOn(false);
+        setError('Não foi possível acessar a câmera. Verifique a permissão do navegador.');
+      }
     }
   };
 
@@ -515,7 +554,8 @@ function RealMediaCapturePackage() {
                 autoPlay
                 playsInline
                 muted
-                className={`absolute inset-0 w-full h-full object-cover -scale-x-100 ${cameraOn ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute inset-0 w-full h-full object-cover ${cameraOn ? 'opacity-100' : 'opacity-0'}`}
+                style={{ transform: facingMode === 'user' ? 'scaleX(-1)' : 'none' }}
               />
               {!cameraOn && (
                 <div className="absolute inset-0 grid place-items-center text-center p-8">
@@ -530,21 +570,33 @@ function RealMediaCapturePackage() {
                   </div>
                 </div>
               )}
-              <div className="absolute inset-x-0 bottom-0 p-5 pt-16 bg-gradient-to-t from-black/80 to-transparent flex justify-center gap-3">
-                {cameraOn && !recording && (
-                  <button onClick={startRecording} className="btn bg-white text-surface-900 px-6 py-3">
-                    <i className="ri-record-circle-line text-rose-500" /> {clip ? 'Gravar novamente' : 'Gravar amostra'}
-                  </button>
-                )}
-                {recording && (
-                  <button onClick={stopRecording} className="btn bg-rose-500 text-white px-6 py-3">
-                    <i className="ri-stop-fill" /> Encerrar gravação
-                  </button>
-                )}
-                {cameraOn && !recording && (
-                  <button onClick={stopCamera} className="btn bg-white/10 text-white px-4 py-3">
-                    <i className="ri-camera-off-line" />
-                  </button>
+              <div className="absolute inset-x-0 bottom-0 p-5 pt-16 bg-gradient-to-t from-black/80 to-transparent flex flex-col items-center gap-2">
+                <div className="flex justify-center gap-3">
+                  {cameraOn && !recording && (
+                    <button onClick={startRecording} className="btn bg-white text-surface-900 px-6 py-3">
+                      <i className="ri-record-circle-line text-rose-500" /> {clip ? 'Gravar novamente' : 'Gravar amostra'}
+                    </button>
+                  )}
+                  {recording && (
+                    <button onClick={stopRecording} className="btn bg-rose-500 text-white px-6 py-3">
+                      <i className="ri-stop-fill" /> Encerrar gravação
+                    </button>
+                  )}
+                  {cameraOn && !recording && (
+                    <button onClick={handleSwitchCamera} className="btn bg-white/10 text-white px-4 py-3">
+                      <i className="ri-camera-switch-line" /> Trocar câmera
+                    </button>
+                  )}
+                  {cameraOn && !recording && (
+                    <button onClick={stopCamera} className="btn bg-white/10 text-white px-4 py-3">
+                      <i className="ri-camera-off-line" />
+                    </button>
+                  )}
+                </div>
+                {cameraOn && (
+                  <span className="text-2xs text-white/70 font-medium">
+                    {facingMode === 'user' ? 'Câmera frontal' : 'Câmera traseira'}
+                  </span>
                 )}
               </div>
             </div>
