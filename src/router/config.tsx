@@ -6,6 +6,7 @@ import AlphabetPage from "../pages/alphabet/page";
 import AssistantPage from "../pages/assistant/page";
 import RecognitionPage from "../pages/recognition/page";
 import VisionCollectionPage from "../pages/vision-collection/page";
+import RealMediaPage from "../pages/vision-collection/real-media-page";
 import ProgressPage from "../pages/progress/page";
 import CoursesPage from "../pages/courses/page";
 import ExercisesPage from "../pages/exercises/page";
@@ -27,6 +28,7 @@ const routes: RouteObject[] = [
   { path: "/assistant", element: <AssistantPage /> },
   { path: "/recognition", element: <RecognitionPage /> },
   { path: "/vision/coleta", element: <VisionCollectionPage /> },
+  { path: "/vision/midia-real", element: <RealMediaPage /> },
   { path: "/progress", element: <ProgressPage /> },
   { path: "/faq", element: <FAQPage /> },
   { path: "/videoaulas", element: <VideoLessonsPage /> },

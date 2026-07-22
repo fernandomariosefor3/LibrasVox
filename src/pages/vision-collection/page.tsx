@@ -175,6 +175,21 @@ export default function VisionCollectionPage() {
         {clip && <article className="bg-white border border-brand-200 rounded-3xl p-5 animate-fade-up"><div className="flex justify-between items-center mb-4"><div><p className="text-xs font-bold uppercase tracking-widest text-brand-600">3 · Revisão</p><h2 className="text-xl font-extrabold">Amostra pronta</h2></div><span className="badge-brand">{clip.duration.toFixed(1)} segundos</span></div><video src={clip.url} controls className="w-full aspect-video bg-black rounded-2xl" /><div className="flex flex-col sm:flex-row gap-3 mt-4"><button onClick={downloadDatasetItem} className="btn-primary flex-1"><i className="ri-download-2-line" /> Baixar vídeo + metadados</button><button onClick={() => { URL.revokeObjectURL(clip.url); clipUrlRef.current = null; setClip(null); }} className="btn-secondary"><i className="ri-delete-bin-line" /> Descartar</button></div><p className="text-2xs text-surface-400 mt-3"><i className="ri-lock-line mr-1" />A amostra não é enviada para nenhum servidor. Os dois arquivos são baixados apenas neste dispositivo.</p></article>}
       </div>
     </section>
+
+    <section className="max-w-7xl mx-auto px-4 md:px-8 py-8 border-t border-surface-200">
+      <article className="bg-white border border-brand-200 rounded-3xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-widest text-brand-600 mb-1">Mídia Real MVP</p>
+          <h2 className="text-xl font-extrabold text-surface-900">Pacote de mídia real (Oi/Olá, Obrigado, Tchau)</h2>
+          <p className="text-surface-500 text-sm mt-1 max-w-2xl">
+            Esta captura abre em uma página exclusiva para evitar conflito entre os recursos de câmera.
+          </p>
+        </div>
+        <Link to="/vision/midia-real" className="btn-primary shrink-0 whitespace-nowrap">
+          <i className="ri-camera-line" /> Abrir captura de mídia real
+        </Link>
+      </article>
+    </section>
   </main><Footer /></div>;
 }
 
