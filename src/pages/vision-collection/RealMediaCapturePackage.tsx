@@ -43,15 +43,23 @@ function describeCameraError(error: unknown): string {
   return message;
 }
 
-const LOAD_METADATA_TIMEOUT_MS = 8000;
+const METADATA_WAIT_TIMEOUT_MS = 5000;
+const CAMERA_SAFETY_TIMEOUT_MS = 8000;
 
-function waitForLoadedMetadata(video: HTMLVideoElement): Promise<void> {
-  if (video.readyState >= 1) return Promise.resolve();
-  return new Promise((resolve, reject) => {
+/**
+ * Espera o evento loadedmetadata por no máximo 5 segundos, mas nunca
+ * rejeita: se o readyState já for maior que zero, resolve na hora; se o
+ * timeout vencer sem o evento, resolve mesmo assim, para que video.play()
+ * seja sempre tentado (alguns navegadores móveis não disparam
+ * loadedmetadata de forma confiável para streams via srcObject).
+ */
+function waitForLoadedMetadataOrTimeout(video: HTMLVideoElement): Promise<void> {
+  if (video.readyState > 0) return Promise.resolve();
+  return new Promise((resolve) => {
     const timer = window.setTimeout(() => {
       cleanup();
-      reject(new DOMException('Tempo esgotado ao carregar a câmera.', 'AbortError'));
-    }, LOAD_METADATA_TIMEOUT_MS);
+      resolve();
+    }, METADATA_WAIT_TIMEOUT_MS);
     const onLoaded = () => {
       cleanup();
       resolve();
@@ -64,6 +72,14 @@ function waitForLoadedMetadata(video: HTMLVideoElement): Promise<void> {
   });
 }
 
+type CameraStatus = 'off' | 'requesting' | 'preparing' | 'active';
+
+const CAMERA_STATUS_LABEL: Record<Exclude<CameraStatus, 'active'>, string> = {
+  off: 'Câmera desligada',
+  requesting: 'Solicitando acesso à câmera...',
+  preparing: 'Preparando visualização...',
+};
+
 export default function RealMediaCapturePackage() {
   const [signId, setSignId] = useState<RealMediaSignId>(REAL_MEDIA_SIGNS[0].id);
   const [region, setRegion] = useState(REAL_MEDIA_DEFAULT_REGION);
@@ -72,6 +88,7 @@ export default function RealMediaCapturePackage() {
   const [consent, setConsent] = useState(false);
   const [cameraOn, setCameraOn] = useState(false);
   const [cameraStarting, setCameraStarting] = useState(false);
+  const [cameraStatus, setCameraStatus] = useState<CameraStatus>('off');
   const [facingMode, setFacingMode] = useState<CameraFacingMode>('user');
   const [recording, setRecording] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -87,6 +104,14 @@ export default function RealMediaCapturePackage() {
   const startedAtRef = useRef(0);
   const clipUrlRef = useRef<string | null>(null);
   const framesRef = useRef<ExtractedVideoFrame[] | null>(null);
+  const safetyTimeoutRef = useRef<number | null>(null);
+
+  const clearSafetyTimeout = () => {
+    if (safetyTimeoutRef.current !== null) {
+      window.clearTimeout(safetyTimeoutRef.current);
+      safetyTimeoutRef.current = null;
+    }
+  };
 
   const selectedSign = REAL_MEDIA_SIGNS.find((sign) => sign.id === signId) ?? REAL_MEDIA_SIGNS[0];
 
@@ -102,6 +127,7 @@ export default function RealMediaCapturePackage() {
 
   useEffect(() => {
     return () => {
+      clearSafetyTimeout();
       releaseCurrentStream();
       if (clipUrlRef.current) URL.revokeObjectURL(clipUrlRef.current);
       if (framesRef.current) revokeExtractedFrames(framesRef.current);
@@ -128,6 +154,7 @@ export default function RealMediaCapturePackage() {
   const stopCamera = () => {
     releaseCurrentStream();
     setCameraOn(false);
+    setCameraStatus('off');
   };
 
   const requestCameraStream = (mode: CameraFacingMode) =>
@@ -136,46 +163,88 @@ export default function RealMediaCapturePackage() {
       audio: false,
     });
 
-  const attachStream = async (stream: MediaStream) => {
-    streamRef.current = stream;
+  /**
+   * Confirma que o <video> existe, atribui o stream, aguarda metadata (no
+   * máximo 5s, sem travar) e chama play() — só então marca a câmera como
+   * ativa. Se o <video> não existir, para o stream recém-obtido e lança um
+   * erro reconhecível em vez de falhar silenciosamente.
+   */
+  const attachStreamAndActivate = async (stream: MediaStream, mode: CameraFacingMode) => {
     const video = videoRef.current;
-    if (video) {
-      video.srcObject = stream;
-      await waitForLoadedMetadata(video);
-      await video.play();
+    if (!video) {
+      stream.getTracks().forEach((track) => track.stop());
+      throw new Error('MISSING_VIDEO_ELEMENT');
     }
+    streamRef.current = stream;
+    setCameraStatus('preparing');
+    video.srcObject = stream;
+    await waitForLoadedMetadataOrTimeout(video);
+    await video.play();
+    setFacingMode(mode);
+    setCameraOn(true);
+    setCameraStatus('active');
+    setError('');
   };
+
+  const missingVideoMessage =
+    'Não foi possível preparar a visualização da câmera. Recarregue a página e tente novamente.';
 
   const startCamera = async () => {
     if (cameraStarting) return;
     setCameraStarting(true);
     setError('');
+    setCameraStatus('requesting');
     releaseCurrentStream();
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError('Este navegador não disponibilizou acesso à câmera para esta página.');
+      setCameraStatus('off');
+      setCameraStarting(false);
+      return;
+    }
+
+    clearSafetyTimeout();
+    safetyTimeoutRef.current = window.setTimeout(() => {
+      releaseCurrentStream();
+      setCameraOn(false);
+      setCameraStarting(false);
+      setCameraStatus('off');
+      setError(
+        'A câmera foi autorizada, mas o navegador não conseguiu exibir a imagem. Feche outras abas que usam a câmera e tente novamente.',
+      );
+    }, CAMERA_SAFETY_TIMEOUT_MS);
 
     try {
       const stream = await requestCameraStream('user');
-      await attachStream(stream);
-      setFacingMode('user');
-      setCameraOn(true);
+      await attachStreamAndActivate(stream, 'user');
     } catch (firstError) {
-      const isOverconstrained = firstError instanceof DOMException && firstError.name === 'OverconstrainedError';
-      if (isOverconstrained) {
-        setError(describeCameraError(firstError));
-        try {
-          const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-          await attachStream(fallbackStream);
-          setFacingMode('user');
-          setError('');
-          setCameraOn(true);
-        } catch (secondError) {
-          setError(describeCameraError(secondError));
-          setCameraOn(false);
-        }
+      if (firstError instanceof Error && firstError.message === 'MISSING_VIDEO_ELEMENT') {
+        setError(missingVideoMessage);
+        setCameraStatus('off');
       } else {
-        setError(describeCameraError(firstError));
-        setCameraOn(false);
+        const isOverconstrained = firstError instanceof DOMException && firstError.name === 'OverconstrainedError';
+        if (isOverconstrained) {
+          setError(describeCameraError(firstError));
+          try {
+            const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            await attachStreamAndActivate(fallbackStream, 'user');
+          } catch (secondError) {
+            if (secondError instanceof Error && secondError.message === 'MISSING_VIDEO_ELEMENT') {
+              setError(missingVideoMessage);
+            } else {
+              setError(describeCameraError(secondError));
+            }
+            setCameraOn(false);
+            setCameraStatus('off');
+          }
+        } else {
+          setError(describeCameraError(firstError));
+          setCameraOn(false);
+          setCameraStatus('off');
+        }
       }
     } finally {
+      clearSafetyTimeout();
       setCameraStarting(false);
     }
   };
@@ -185,21 +254,26 @@ export default function RealMediaCapturePackage() {
     const nextFacingMode: CameraFacingMode = facingMode === 'user' ? 'environment' : 'user';
     setCameraStarting(true);
     setError('');
+    setCameraStatus('preparing');
 
     releaseCurrentStream();
 
     try {
       const stream = await requestCameraStream(nextFacingMode);
-      await attachStream(stream);
-      setFacingMode(nextFacingMode);
+      await attachStreamAndActivate(stream, nextFacingMode);
     } catch {
       try {
         const fallbackStream = await requestCameraStream(facingMode);
-        await attachStream(fallbackStream);
+        await attachStreamAndActivate(fallbackStream, facingMode);
         setError('Não foi possível alternar a câmera neste dispositivo.');
       } catch (fallbackError) {
         setCameraOn(false);
-        setError(describeCameraError(fallbackError));
+        setCameraStatus('off');
+        if (fallbackError instanceof Error && fallbackError.message === 'MISSING_VIDEO_ELEMENT') {
+          setError(missingVideoMessage);
+        } else {
+          setError(describeCameraError(fallbackError));
+        }
       }
     } finally {
       setCameraStarting(false);
@@ -469,7 +543,7 @@ export default function RealMediaCapturePackage() {
                     <p className="text-surface-300 text-sm">Enquadre mãos, braços, rosto e tronco.</p>
                     <button onClick={startCamera} disabled={cameraStarting} className="btn-primary mt-4 disabled:opacity-50">
                       <i className={cameraStarting ? 'ri-loader-4-line animate-spin' : 'ri-camera-line'} />{' '}
-                      {cameraStarting ? 'Ativando câmera…' : 'Ativar câmera'}
+                      {cameraStarting ? 'Abrindo câmera...' : 'Iniciar câmera'}
                     </button>
                   </div>
                 </div>
@@ -497,11 +571,14 @@ export default function RealMediaCapturePackage() {
                     </button>
                   )}
                 </div>
-                {cameraOn && (
-                  <span className="text-2xs text-white/70 font-medium">
-                    {facingMode === 'user' ? 'Câmera frontal' : 'Câmera traseira'}
-                  </span>
-                )}
+                <span className={`text-2xs font-medium ${error ? 'text-rose-300' : 'text-white/70'}`}>
+                  {error ||
+                    (cameraStatus === 'active'
+                      ? facingMode === 'user'
+                        ? 'Câmera frontal ativa'
+                        : 'Câmera traseira ativa'
+                      : CAMERA_STATUS_LABEL[cameraStatus])}
+                </span>
               </div>
             </div>
 
