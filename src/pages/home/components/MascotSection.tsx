@@ -142,8 +142,8 @@ export default function MascotSection() {
             Veja como cada sinal se forma
           </h2>
           <p className="text-slate-500 max-w-lg mx-auto">
-            Descrição linguística de cada configuração de mão, com base em referências oficiais da
-            Língua Brasileira de Sinais.
+            Prévia ilustrativa do dicionário: ícones e descrições textuais de configuração de mão,
+            ainda em processo de revisão linguística.
           </p>
         </div>
 
@@ -289,10 +289,16 @@ export default function MascotSection() {
                 <div className="w-8 h-8 flex items-center justify-center mb-2" style={{ color: scene.color }}>
                   <i className="ri-book-open-line text-xl"></i>
                 </div>
-                <p className="text-xs text-slate-400 font-medium">Referência</p>
-                <p className="text-sm font-bold text-slate-700">Descrição oficial</p>
+                <p className="text-xs text-slate-400 font-medium">Situação</p>
+                <p className="text-sm font-bold text-slate-700">Em revisão linguística</p>
               </div>
             </div>
+
+            {/* Aviso de caráter ilustrativo */}
+            <p className="text-xs text-slate-400 mb-7 leading-relaxed">
+              Os ícones são ilustrativos. A demonstração completa de um sinal exige vídeo, movimento,
+              orientação e expressão facial validados por revisão linguística humana.
+            </p>
 
             {/* CTA */}
             <div className="pt-5 border-t border-slate-100">

@@ -81,7 +81,7 @@ const categories: FAQCategory[] = [
     items: [
       {
         q: 'Quais recursos estão disponíveis?',
-        a: 'A plataforma oferece: Dicionário com 146+ sinais reais fotografados, Alfabeto 3D interativo com fotos das mãos, Cursos estruturados do Básico ao Avançado, Exercícios práticos com quiz interativo, IA Assistente Gemini com 4 modos especializados, Demonstração de reconhecimento visual de sinais por upload de imagem, Acompanhamento de progresso pessoal, e um Intérprete Virtual que guia você pelo site.',
+        a: 'A plataforma oferece: Dicionário com mais de 200 registros textuais organizados por categoria (nesta versão os cards usam ícones ilustrativos; fotografias e vídeos individualmente verificados serão incorporados gradualmente), Alfabeto com recurso visual 2D de apoio à datilologia, Cursos estruturados do Básico ao Avançado, Exercícios práticos com quiz interativo, IA Assistente Gemini com 4 modos especializados que só responde com evidência linguística validada — quando não há evidência suficiente, informa isso em vez de arriscar uma resposta incorreta, Protótipo experimental de reconhecimento por câmera ao vivo com apenas 3 sinais disponíveis, processado localmente no navegador, Acompanhamento de progresso pessoal, e um Intérprete Virtual que guia você pelo site.',
       },
       {
         q: 'A IA Assistente tem limite de uso?',
@@ -89,7 +89,7 @@ const categories: FAQCategory[] = [
       },
       {
         q: 'Como funciona a demonstração de reconhecimento de sinais?',
-        a: 'A demonstração permite que você faça upload de uma imagem mostrando um sinal em Libras e receba um resultado simulado — gerado automaticamente para fins didáticos. Não é uma IA real treinada em Libras, mas uma simulação que mostra como a tecnologia de reconhecimento visual poderia funcionar no futuro. Sempre valide seu aprendizado com um professor ou intérprete qualificado.',
+        a: 'É um protótipo experimental que usa a câmera ao vivo do seu dispositivo — não é upload de imagem. O processamento acontece localmente no navegador, com a biblioteca MediaPipe Hand Landmarker, e a gravação não é enviada a nenhum servidor. A avaliação é heurística (compara geometria e trajetória dos pontos da mão) e ainda não substitui um modelo treinado especificamente em Libras nem a avaliação de um professor ou intérprete qualificado. Atualmente apenas três sinais estão disponíveis para prática (Oi, Obrigado e Tchau) — os demais estão em fase de coleta de dados. Não é um tradutor de Libras nem garante precisão de reconhecimento.',
       },
       {
         q: 'Posso salvar meu progresso?',
@@ -101,7 +101,7 @@ const categories: FAQCategory[] = [
       },
       {
         q: 'O dicionário tem quantos sinais?',
-        a: 'Atualmente o dicionário conta com mais de 146 sinais organizados em 20 categorias, como Alimentos, Família, Emoções, Saudações, Animais, Cores, Tempo, Transporte, entre outras. Novos sinais são adicionados periodicamente.',
+        a: 'Atualmente o dicionário conta com mais de 200 registros textuais organizados em mais de 20 categorias, como Alimentos, Família, Emoções, Saudações, Animais, Cores, Tempo, Transporte, entre outras. Nesta versão os cards exibem ícones ilustrativos; fotografias e vídeos individualmente verificados, além de validação linguística humana, estão sendo incorporados gradualmente.',
       },
     ],
   },
@@ -122,8 +122,8 @@ const categories: FAQCategory[] = [
         a: 'O aprendizado de uma língua é um processo contínuo. Com dedicação diária de 15-30 minutos na plataforma, é possível adquirir vocabulário básico em algumas semanas. A fluência, no entanto, exige anos de prática constante e imersão na comunidade surda.',
       },
       {
-        q: 'As fotos dos sinais são reais?',
-        a: 'Sim! As fotos são imagens profissionais de mãos realizando cada sinal, com fundo neutro para facilitar a visualização. Isso garante uma referência visual precisa e de qualidade para o aprendizado.',
+        q: 'O dicionário tem fotos dos sinais?',
+        a: 'Ainda não. Nesta versão, cada sinal do dicionário é representado por um ícone ilustrativo e por uma descrição textual do passo a passo (configuração de mão, localização e movimento). Um ícone estático não consegue transmitir movimento, orientação, localização no espaço nem expressão facial — elementos que fazem parte do sinal completo em Libras. Fotografias e vídeos verificados, junto com validação linguística humana, estão sendo incorporados gradualmente.',
       },
       {
         q: 'Libras é a mesma coisa que mimica ou gestos?',
@@ -141,7 +141,7 @@ const categories: FAQCategory[] = [
     items: [
       {
         q: 'Em quais dispositivos funciona?',
-        a: 'O LVP funciona em computadores, tablets e smartphones. É uma aplicação web responsiva, então basta acessar pelo navegador. A demonstração de reconhecimento de sinais funciona por upload de imagem — basta selecionar uma foto do seu dispositivo.',
+        a: 'O LVP funciona em computadores, tablets e smartphones. É uma aplicação web responsiva, então basta acessar pelo navegador. O protótipo de reconhecimento de sinais usa a câmera ao vivo do dispositivo (não é upload de imagem) e requer permissão de acesso à câmera pelo navegador.',
       },
       {
         q: 'Preciso instalar algum aplicativo?',
@@ -152,8 +152,8 @@ const categories: FAQCategory[] = [
         a: 'O site foi desenvolvido seguindo boas práticas de acessibilidade web (WCAG), com textos alternativos para imagens, contraste adequado, navegação por teclado e estrutura semântica. Estamos sempre trabalhando para melhorar ainda mais a acessibilidade.',
       },
       {
-        q: 'Por que as imagens demoram a carregar?',
-        a: 'As fotos dos sinais são imagens de alta qualidade para garantir clareza visual. Se estiver com conexão lenta, tente usar uma rede Wi-Fi ou aguardar o carregamento completo. Estamos otimizando continuamente o desempenho da plataforma.',
+        q: 'Por que alguns vídeos demoram a carregar?',
+        a: 'Alguns sinais do dicionário têm um vídeo de referência incorporado do YouTube; o carregamento depende da sua conexão e do player externo. Os cards do dicionário em si usam ícones leves, não fotos, então não deveriam demorar para aparecer. Se um vídeo específico não carregar, tente uma rede Wi-Fi ou recarregar a página.',
       },
       {
         q: 'Encontrei um erro no site. O que faço?',
@@ -387,7 +387,7 @@ export default function FAQPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               { to: '/dictionary', icon: 'ri-book-open-line', label: 'Dicionário' },
-              { to: '/alphabet', icon: 'ri-keyboard-line', label: 'Alfabeto 3D' },
+              { to: '/alphabet', icon: 'ri-keyboard-line', label: 'Alfabeto' },
               { to: '/cursos', icon: 'ri-graduation-cap-line', label: 'Cursos' },
               { to: '/exercicios', icon: 'ri-pencil-ruler-2-line', label: 'Exercícios' },
             ].map((link) => (
